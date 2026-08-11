@@ -1,1 +1,0 @@
-# yaju-home.com
