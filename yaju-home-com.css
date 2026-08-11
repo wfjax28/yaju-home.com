@@ -5,12 +5,12 @@
     background-position: 0 0;
   }
   to {
-    background-position: -308px 0; /* 画像の元の横幅（px）を指定 */
+    background-position: -308px 0;
   }
 }
 
 :root {
-  color-scheme: light dark; 
+  color-scheme: light dark;
 }
 
 header {
@@ -19,21 +19,23 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  header::before {
+  position: relative;
+  overflow: hidden;
+}
+
+header::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url(./picture/yajutei-on-header.png);
+  background-image: url("./picture/yajutei-on-header.png");
   background-repeat: repeat-x;
   background-size: auto 100%;
   animation: HeaderBackgroundScroll 20s linear infinite;
   opacity: 0.7;
   z-index: 0;
-  }
-  
-  header > * {
+}
+
+header > * {
   position: relative;
   z-index: 1;
-  }
 }
