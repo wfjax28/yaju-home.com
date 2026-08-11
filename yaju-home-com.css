@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@keyframes scrollBg {
+@keyframes HeaderBackgroundScroll {
   from {
     background-position: 0 0;
   }
@@ -15,16 +15,14 @@
 
 header {
   width: 100%;
-  height: clamp(80px, 20vh, 320px);
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
-  font-weight: 300;
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-image: url(./picture/yajutei-on-header.png);
-  background-size: auto 100%;
-  background-position: center;
   background-repeat: repeat-x;
-  animation: scrollBg 20s linear infinite;
+  background-size: auto 100%;
+  animation: HeaderBackgroundScroll*20s linear infinite;
 }
 
 
