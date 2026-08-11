@@ -33,6 +33,7 @@ header::before {
   animation: HeaderBackgroundScroll 20s linear infinite;
   opacity: 0.7;
   z-index: 0;
+  background-color: brown;
 }
 
 header > * {
