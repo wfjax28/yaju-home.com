@@ -19,21 +19,21 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-header::before {
-content: "";
-position: absolute;
-inset: 0;
-background-image: url(./picture/yajutei-on-header.png);
-background-repeat: repeat-x;
-background-size: auto 100%;
-animation: HeaderBackgroundScroll 20s linear infinite;
-opacity: 0.7;
-z-index: 0;
-}
-
-header > * {
-position: relative;
-z-index: 1;
+  
+  header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url(./picture/yajutei-on-header.png);
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  animation: HeaderBackgroundScroll 20s linear infinite;
+  opacity: 0.7;
+  z-index: 0;
+  }
+  
+  header > * {
+  position: relative;
+  z-index: 1;
+  }
 }
