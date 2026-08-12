@@ -1,3 +1,8 @@
 Discordサーバー「野獣邸」の非公式サイトソースリポジトリです
 テスト用にgithub pagesを使用する都合上Readmeを直置きできないのでtxtファイルとして置いています
 特段書くことはありません
+
+以下サイトリンク
+
+本サイト: https://yaju-home.com/
+テストページ: https://wfjax28.github.io/yaju-home.com/
