@@ -49,3 +49,12 @@ header > * {
   font-family: 'KouzanMouhituFont';
   font-size: 72px;
 }
+
+.main-header{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
