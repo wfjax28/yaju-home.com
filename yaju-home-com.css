@@ -56,7 +56,7 @@ header > * {
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 10%;
+  margin: clamp(42px, 8%, 96px) 10%;
 }
 
 .main-header-first{
