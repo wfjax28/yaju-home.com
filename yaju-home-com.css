@@ -56,7 +56,7 @@ header > * {
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 15% 10%;
+  margin: 10%;
 }
 
 .main-header-first{
@@ -65,5 +65,5 @@ header > * {
 
 .main-header-warn{
   font-size: 24px;
-  margin: 10% 0%;
+  margin: 5% 0%;
 }
