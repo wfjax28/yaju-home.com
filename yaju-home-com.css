@@ -56,5 +56,14 @@ header > * {
   justify-content: center;
   align-items: center;
   text-align: center;
+  margin: 15% 10%;
 }
 
+.main-header-first{
+  font-size: 16px;
+}
+
+.main-header-warn{
+  font-size: 24px;
+  margin: 10% 0%;
+}
