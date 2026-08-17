@@ -1,104 +1,469 @@
 @charset "UTF-8";
 
+/* ============================================================
+   野獣邸.com - 非公式ファンサイト
+   Dynamic & Visual-focused theme
+   ============================================================ */
+
+/* ---------- Fonts ---------- */
 @font-face {
-  font-family: 'KouzanMouhituFont';
-  src: url(./items/KouzanMouhituFontOTF.otf);
+  font-family: 'kouzanbrushfont';
+  src: url('items\\kouzanbrushfontotf-subset.ttf') format('truetype');
+  /* font-display: swap; フォント読み込み中もテキストを表示 */
 }
-
-@keyframes HeaderBackgroundScroll {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: -308px 0;
-  }
-}
-
+/* ---------- Design tokens ---------- */
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
+
+  /* base */
+  --c-bg: #0b0a0e;
+  --c-surface: rgba(30, 26, 38, 0.62);
+  --c-border: rgba(255, 179, 71, 0.16);
+
+  /* accents */
+  --c-primary: #ffb347;
+  --c-accent: #ff5e3a;
+  --c-text: #f6efe4;
+  --c-text-dim: #b7ab9b;
+
+  /* effects */
+  --radius: 24px;
+  --shadow-lg: 0 30px 70px rgba(0, 0, 0, 0.55);
+  --glow: 0 0 26px rgba(255, 179, 71, 0.4);
+
+  /* type */
+  --font-body: "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, system-ui, sans-serif;
+  --font-logo: 'kouzanbrushfont', var(--font-body);
 }
 
-header {
-  width: 100%;
-  height: 20vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
+/* ---------- Reset / base ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--c-text);
+  background: var(--c-bg);
+  line-height: 1.8;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-header::before {
+/* animated aurora background */
+body::before {
   content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("./picture/yajutei-on-header.png");
-  background-repeat: repeat-x;
-  background-size: auto 100%;
-  animation: HeaderBackgroundScroll 20s linear infinite;
-  opacity: 0.7;
-  z-index: 0;
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  background:
+    radial-gradient(42% 42% at 18% 12%, rgba(255, 94, 58, 0.22), transparent 62%),
+    radial-gradient(40% 40% at 86% 20%, rgba(255, 179, 71, 0.16), transparent 60%),
+    radial-gradient(50% 50% at 60% 96%, rgba(120, 70, 180, 0.16), transparent 62%),
+    var(--c-bg);
+  animation: Aurora 22s ease-in-out infinite alternate;
+  filter: blur(30px);
 }
 
-header > * {
+/* ---------- Keyframes ---------- */
+@keyframes Aurora {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(4%, -3%) scale(1.06); }
+  100% { transform: translate(-4%, 2%) scale(1.1); }
+}
+
+@keyframes HeaderScroll {
+  from { background-position: 0 0; }
+  to   { background-position: -308px 0; }
+}
+
+@keyframes Float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+
+@keyframes FadeUp {
+  from { opacity: 0; transform: translateY(34px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes Pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.06); }
+}
+
+@keyframes Shine {
+  0%                { transform: translateX(-130%) skewX(-18deg); }
+  55%, 100%         { transform: translateX(230%) skewX(-18deg); }
+}
+
+@keyframes ScrollWheel {
+  0%   { opacity: 0; transform: translateY(0); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(12px); }
+}
+
+/* ============================================================
+   Header (Hero)
+   ============================================================ */
+.site-header {
   position: relative;
-  z-index: 1;
-}
-
-.header-yajutei{
-  font-family: 'KouzanMouhituFont';
-  font-size: 72px;
-}
-
-.main-header{
+  width: 100%;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: clamp(42px, 8%, 96px) 10%;
-}
-
-.main-header-first{
-  display: block;
-  font-size: clanp(16px, 10rem, 22px);
-}
-
-.main-header-warn{
-  display: block;
-  font-size: 24px;
-  margin: 5% 0%;
-}
-
-
-
-footer{
-  width: 100%;
-  height: 20vh;
-  display: flex;
-  position: relative;
   overflow: hidden;
+  isolation: isolate;
 }
 
-footer::before{
+/* animated mansion strip */
+.site-header::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url(./picture/are.webp);
-  background-size: 100% 100%;
-  opacity: 0.7;
-  z-index: 0;
+  z-index: -2;
+  background-image: url("./picture/yajutei-on-header.png");
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  background-position: 0 50%;
+  animation: HeaderScroll 26s linear infinite;
+  opacity: 0.5;
 }
 
-footer > * {
+/* dark gradient wash for legibility */
+.site-header__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60% 50% at 50% 50%, rgba(11, 10, 14, 0.15), rgba(11, 10, 14, 0.9)),
+    linear-gradient(180deg, rgba(11, 10, 14, 0.35) 0%, rgba(11, 10, 14, 0) 35%, rgba(11, 10, 14, 0.85) 100%);
+}
+
+.site-header__content {
+  padding: 0 6%;
+  animation: FadeUp 1s 0.15s ease both;
+}
+
+.site-header__label {
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.42em;
+  color: var(--c-primary);
+  text-transform: uppercase;
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  padding: 0.4em 1.4em;
+  backdrop-filter: blur(6px);
+  margin-bottom: 1.6em;
+  animation: Float 5s ease-in-out infinite;
+}
+
+.site-header__title {
+  font-family: var(--font-logo);
+  font-size: clamp(4rem, 18vw, 9rem);
+  line-height: 1.05;
+  letter-spacing: 0.08em;
+  color: var(--c-text);
+  text-shadow: 0 0 20px rgba(255, 179, 71, 0.55), 0 0 60px rgba(255, 94, 58, 0.35);
+}
+
+.site-header__subtitle {
+  margin-top: 1.2em;
+  font-size: clamp(0.95rem, 3.4vw, 1.25rem);
+  color: var(--c-text-dim);
+  letter-spacing: 0.06em;
+}
+
+.site-header__cta {
+  display: inline-block;
+  margin-top: 2.2em;
+  padding: 0.8em 2.4em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #1a1208;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: var(--glow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.site-header__cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 40px rgba(255, 126, 61, 0.7);
+}
+
+/* scroll hint */
+.site-header__scroll {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  width: 26px;
+  height: 42px;
+  transform: translateX(-50%);
+  border: 2px solid rgba(255, 179, 71, 0.5);
+  border-radius: 14px;
+}
+
+.site-header__scroll::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  width: 4px;
+  height: 9px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: var(--c-primary);
+  animation: ScrollWheel 1.8s ease-in-out infinite;
+}
+
+/* ============================================================
+   Main / Intro
+   ============================================================ */
+.main-content {
   position: relative;
-  z-index: 1;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 9vw, 6.5rem) 5%;
 }
 
-.f-h1{
+.intro {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 4.5rem;
+}
+
+.section-title {
+  font-family: var(--font-logo);
+  font-size: clamp(1.8rem, 5vw, 2.7rem);
+  letter-spacing: 0.06em;
+  color: var(--c-primary);
+  text-shadow: 0 0 18px rgba(255, 179, 71, 0.35);
+  margin-bottom: 1.2em;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 0.7em auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--c-accent), var(--c-primary));
+}
+
+.intro__lead {
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  color: var(--c-text);
+}
+
+.intro__notice {
+  margin-top: 1.8em;
+  padding: 1.1em 1.4em;
+  font-size: 0.86rem;
+  color: var(--c-text-dim);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-left: 4px solid var(--c-accent);
+  border-radius: 14px;
+  backdrop-filter: blur(8px);
   text-align: left;
-  margin-top: 18px;
-  margin-left: 18px;
-  font-family: 'KouzanMouhituFont';
-  font-size: 22px;
+}
+
+.intro__notice::before {
+  content: "⚠ 注意";
+  display: block;
+  font-weight: 700;
+  color: var(--c-accent);
+  margin-bottom: 0.4em;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   Cards
+   ============================================================ */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(1.4rem, 4vw, 2.4rem);
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  padding: 2.4rem 2rem 2.8rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.card__glow {
+  position: absolute;
+  top: -40%;
+  left: -30%;
+  width: 70%;
+  height: 80%;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.card--video .card__glow {
+  background: radial-gradient(circle, rgba(255, 94, 58, 0.55), transparent 70%);
+}
+
+.card--quiz .card__glow {
+  background: radial-gradient(circle, rgba(255, 179, 71, 0.5), transparent 70%);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  transform: translateX(-130%) skewX(-18deg);
+  pointer-events: none;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(255, 179, 71, 0.55);
+  box-shadow: var(--shadow-lg), var(--glow);
+}
+
+.card:hover .card__glow {
+  opacity: 0.95;
+  transform: translate(8%, 6%);
+}
+
+.card:hover::after {
+  animation: Shine 0.9s ease;
+}
+
+.card__icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 1.1rem;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  color: #1a1208;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+  border-radius: 50%;
+  box-shadow: var(--glow);
+  animation: Float 4s ease-in-out infinite;
+}
+
+.card__title {
+  font-family: var(--font-logo);
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  letter-spacing: 0.06em;
+  color: var(--c-text);
+}
+
+.card__text {
+  margin-top: 0.8rem;
+  color: var(--c-text-dim);
+  font-size: 0.95rem;
+}
+
+.card__badge {
+  display: inline-block;
+  margin-top: 1.6rem;
+  padding: 0.35em 1.3em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--c-primary);
+  border: 1px solid rgba(255, 179, 71, 0.4);
+  border-radius: 999px;
+  animation: Pulse 2.6s ease-in-out infinite;
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.site-footer {
+  position: relative;
+  width: 100%;
+  padding: clamp(3rem, 8vw, 5rem) 5%;
+  text-align: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: url(./picture/are.webp);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+}
+
+.site-footer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, var(--c-bg), rgba(11, 10, 14, 0.55));
+}
+
+.site-footer__title {
+  font-family: var(--font-logo);
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  letter-spacing: 0.08em;
+  color: var(--c-primary);
+  text-shadow: 0 0 16px rgba(255, 179, 71, 0.35);
+}
+
+.site-footer__copyright {
+  margin-top: 1.2em;
+  font-size: 0.8rem;
+  color: var(--c-text-dim);
+  letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   Reveal-on-scroll (driven by JS)
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* stagger card reveal */
+.cards .card:nth-child(2) { transition-delay: 0.12s; }
+.cards .card:nth-child(3) { transition-delay: 0.24s; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+  .reveal { opacity: 1; transform: none; }
 }

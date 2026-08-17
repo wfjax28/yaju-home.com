@@ -1,39 +1,69 @@
 <!DOCTYPE html>
 <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <title>野獣邸.com</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <meta name="referrer" content="no-referrer">
-        <meta name="description" content="Discordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。">
-        <link rel="icon" href="./picture/favicon.png" sizes="any">
-        <link rel="canonical" href="https://yaju-home.com/">
-        <!-- configure -->
-        <link rel="stylesheet" href="./yaju-home-com.css">
-        <script src="yaju-home-com.js"></script>
-        <!-- some font -->
-    </head>
-    <home>
-        <header>
-            <a class="header-yajutei">野獣邸</a>
-        </header>
-        <section class="main">
-            <dev class="main-header">
-            <p class="main-header-first">本サイトはDiscordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。</p>
-            <span class="main-header-warn" style="color: red;">本サイトはコートコーポレーション社事務所兼撮影スタジオ(通称: 野獣邸)及び、これに関係するいかなる組織、団体との関係は一切ありません。</span>
-            </dev>
-            <dev class="main-today's_video">
-                <p class="main-today's_video-first">今日の婬夢動画</p>
-                <p>please wait for organize</p>
-            </dev>
-            <dev class="main-weakly_quiz">
-                <p class="main-weakly_quiz-first">今週のクイズ</p>
-                <p>please wait for organize</p>
-            </dev>
+<head>
+    <meta charset="UTF-8">
+    <title>野獣邸.com | 非公式サイト</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta name="description" content="Discordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。">
+    <link rel="icon" href="./picture/favicon.png" sizes="any">
+    <link rel="canonical" href="https://yaju-home.com/">
+
+    <!-- style -->
+    <link rel="stylesheet" href="./yaju-home-com.css">
+    <!-- script -->
+    <script src="./yaju-home-com.js" defer></script>
+</head>
+<body>
+    <!-- ===== Hero / Header ===== -->
+    <header class="site-header">
+        <div class="site-header__overlay"></div>
+        <div class="site-header__content">
+            <p class="site-header__label">非公式ファンサイト</p>
+            <h1 class="site-header__title">野獣邸</h1>
+            <p class="site-header__subtitle">Discordサーバー「野獣邸 | 野獣先輩Tag」</p>
+            <a class="site-header__cta" href="#content">この邸宅へ上がる</a>
+        </div>
+        <!-- <div class="site-header__scroll" aria-hidden="true"></div> -->
+    </header>
+
+    <!-- ===== Main ===== -->
+    <main id="content" class="main-content">
+
+        <!-- ようこそ -->
+        <section class="intro reveal">
+            <h2 class="section-title">ようこそ、野獣の棲む館へ</h2>
+            <p class="intro__lead">本サイトはDiscordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。</p>
+            <p class="intro__notice">
+                本サイトはコートコーポレーション社事務所兼撮影スタジオ(通称: 野獣邸)及び、
+                これに関係するいかなる組織、団体との関係は一切ありません。
+            </p>
         </section>
-        <footer>
-            <h1 class="f-h1">野獣邸 | 野獣先輩Tag</p>
-            
-        </footer>
-    </home>
+
+        <!-- コンテンツカード -->
+        <section class="cards">
+            <article class="card card--video reveal">
+                <div class="card__glow" aria-hidden="true"></div>
+                <div class="card__icon" aria-hidden="true">▶</div>
+                <h2 class="card__title">今日の婬夢動画</h2>
+                <p class="card__text">please wait for organize</p>
+                <span class="card__badge">COMING SOON</span>
+            </article>
+
+            <article class="card card--quiz reveal">
+                <div class="card__glow" aria-hidden="true"></div>
+                <div class="card__icon" aria-hidden="true">?</div>
+                <h2 class="card__title">今週のクイズ</h2>
+                <p class="card__text">please wait for organize</p>
+                <span class="card__badge">COMING SOON</span>
+            </article>
+        </section>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer class="site-footer">
+        <h2 class="site-footer__title">野獣邸 | 野獣先輩Tag</h2>
+        <p class="site-footer__copyright">© 野獣邸.com 非公式</p>
+    </footer>
+</body>
 </html>
