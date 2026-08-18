@@ -51,12 +51,44 @@
     --c-menu-bg: rgba(14, 13, 13, 0.92);
     --c-menu-bg-accent: rgba(168, 167, 167, 0.97);
 
+    --radius: 24px;
+    --shadow-lg: 0 30px 70px rgba(0, 0, 0, 0.55);
+    --glow: 0 0 26px rgba(255, 179, 71, 0.4);
     /* type */
     --font-body: "Google Sans", "Noto Sans JP", Meiryo, system-ui, sans-serif;
     --font-logo: 'kouzanbrushfont', var(--font-body);
   }
 }
+@keyframes Aurora {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(4%, -3%) scale(1.06); }
+  100% { transform: translate(-4%, 2%) scale(1.1); }
+}
 
+@keyframes HeaderScroll {
+  from { background-position: 0 0; }
+  to   { background-position: -308px 0; }
+}
+
+@keyframes Float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+
+@keyframes FadeUp {
+  from { opacity: 0; transform: translateY(34px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes Pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.06); }
+}
+
+@keyframes Shine {
+  0%                { transform: translateX(-130%) skewX(-18deg); }
+  55%, 100%         { transform: translateX(230%) skewX(-18deg); }
+}
 
 /* ---------- Reset / base ---------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -83,6 +115,13 @@ body::before {
     radial-gradient(40% 40% at 86% 20%, rgba(255, 179, 71, 0.16), transparent 60%),
     radial-gradient(50% 50% at 60% 96%, rgba(120, 70, 180, 0.16), transparent 62%),
     var(--c-bg);
+}
+
+.main-content {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 9vw, 6.5rem) 5%;
 }
 
 .hero-header {
@@ -112,6 +151,8 @@ body::before {
   /* 真ん中に寄せる */
   text-align: center;
   text-shadow: 0 0 12px rgba(250, 250, 249, 0.5);
+  animation: FadeUp 1s 0.15s ease both;
+
 }
 .google-sans {
   font-family: "Google Sans", sans-serif;
@@ -128,16 +169,80 @@ body::before {
   font-weight: 400;
   font-style: normal;
 }
-
-.main-header-title{
-  font-family: var(--font-logo);
-  font-size: clamp(2.5rem, 12vw, 4rem);
-  line-height: 1.05;
-  letter-spacing: 0.08em;
-  color: var(--c-text);
-  text-align: center;
+.potta-one-regular {
+  font-family: "Potta One", system-ui;
+  font-weight: 200;
+  font-style: normal;
 }
 
+/* 外枠：テキストと画像を横並びにする Flex コンテナ */
+.main-header-quote-wrapper {
+  display: flex;
+  align-items: center; /* 上下中央揃え */
+  justify-content: space-between;
+  gap: 1.5rem; /* テキストと画像の間の余白 */
+  background-color: var(--c-menu-bg); /* 引用背景（ライト/ダーク対応） */
+  padding: 1.5rem 2rem;
+/*  border-left: 5px solid var(--c-primary, #666); /* 引用風の左アクセント線 */
+  border-radius: 8px; /* 角丸 */
+  margin: 2rem 0;
+}
+
+/* 引用テキスト部分 */
+.main-header-title {
+  font-family: "Potta One", system-ui;
+  font-size: clamp(1.25rem, 4.5vw, 2.2rem); /* 引用文向けにサイズを少し調整 */
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  color: var(--c-text);
+  text-align: left; /* 引用風にするため左寄せに変更 */
+  margin: 0;
+  position: relative;
+  flex: 1; /* 空きスペースを埋める */
+}
+
+/* 右側の画像 */
+.main-header-quote-img {
+  width: 120px; /* 画像の横幅 */
+  height: 120px; /* 画像の高さ */
+  object-fit: cover; /* アスペクト比を維持してトリミング */
+  border-radius: 8px; /* 必要に応じて丸くする (50% にすると円形) */
+  flex-shrink: 0; /* 画面が狭くなっても画像が潰れないように設定 */
+}
+
+/* スマホ対応（画面幅が狭い場合は縦並びにする） */
+@media (max-width: 600px) {
+  .main-header-quote-wrapper {
+    flex-direction: column-reverse; /* 画像を上、または下に折り返す */
+    align-items: flex-start;
+  }
+  
+  .main-header-quote-img {
+    width: 80px;
+    height: 80px;
+  }
+}
+.intro__notice {
+  margin-top: 1.8em;
+  padding: 1.1em 1.4em;
+  font-size: 0.86rem;
+  color: red;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-left: 4px solid var(--c-accent);
+  border-radius: 14px;
+  /*backdrop-filter: blur(8px); */
+  text-align: left;
+}
+
+.intro__notice::before {
+  content: "⚠ 注意";
+  display: block;
+  font-weight: 700;
+  color: var(--c-accent);
+  margin-bottom: 0.4em;
+  letter-spacing: 0.05em;
+}
 /* ---------- メニューボタン（左上固定） ---------- */
 .menu-btn {
   position: fixed;
@@ -330,4 +435,126 @@ body.menu-open {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001s !important;
   }
+}
+
+.site-footer {
+  position: relative;
+  width: 100%;
+  padding: clamp(3rem, 8vw, 5rem) 5%;
+  text-align: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+.site-footer__title {
+  font-family: var(--font-logo);
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  letter-spacing: 0.08em;
+  color: var(--c-primary);
+}
+
+
+/* ============================================================
+   Cards
+   ============================================================ */
+.cards {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(1.4rem, 4vw, 2.4rem);
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  padding: 2.4rem 2rem 2.8rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  /*backdrop-filter: blur(12px); */
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+/* リンクタグの下線や文字色の変更を無効化 */
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block; /* カード全体にクリック領域を広げる */
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  transform: translateX(-130%) skewX(-18deg);
+  pointer-events: none;
+}
+
+.card:hover {
+  /*transform: translateY(-10px); */
+  border-color: rgba(255, 179, 71, 0.55);
+  box-shadow: var(--shadow-lg), var(--glow);
+}
+
+.card:hover .card__glow {
+  opacity: 0.95;
+  transform: translate(8%, 6%);
+}
+
+.card:hover::after {
+  animation: Shine 0.9s ease;
+}
+
+.card__icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 1.1rem;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  color: #1a1208;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+  border-radius: 50%;
+  box-shadow: var(--glow);
+  /* animation: Float 4s ease-in-out infinite; */
+}
+/* その中の画像の設定 */
+.card__icon img {
+  /* 親要素（.card__icon）の幅・高さに合わせる */
+  width: 75%;
+  height: 75%;
+  /* 縦横比を保ったまま、枠内に収める（はみ出さない） */
+  object-fit: contain;
+}
+
+
+.card__title {
+  font-family: var(--font-logo);
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  letter-spacing: 0.06em;
+  color: var(--c-text);
+}
+
+.card__text {
+  margin-top: 0.8rem;
+  color: var(--c-text-dim);
+  font-size: 0.95rem;
+}
+
+.card__badge {
+  display: inline-block;
+  margin-top: 1.6rem;
+  padding: 0.35em 1.3em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--c-primary);
+  border: 1px solid var(--c-primary);
+  border-radius: 999px;
+  /*animation: Pulse 2.6s ease-in-out infinite;*/
 }
