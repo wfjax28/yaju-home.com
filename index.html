@@ -1,39 +1,72 @@
 <!DOCTYPE html>
 <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <title>野獣邸.com</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <meta name="referrer" content="no-referrer">
-        <meta name="description" content="Discordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。">
-        <link rel="icon" href="./picture/favicon.png" sizes="any">
-        <link rel="canonical" href="https://yaju-home.com/">
-        <!-- configure -->
-        <link rel="stylesheet" href="./yaju-home-com.css">
-        <script src="yaju-home-com.js"></script>
-        <!-- some font -->
-    </head>
-    <home>
-        <header>
-            <a class="header-yajutei">野獣邸</a>
+<!DOCTYPE html>
+<html lang="ja">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+    
+    <meta charset="UTF-8">
+    <title>野獣邸.com | 非公式サイト</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta name="description" content="Discordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。">
+    <link rel="icon" href="./picture/favicon.png" sizes="any">
+    <link rel="canonical" href="https://yaju-home.com/">
+
+    <!-- style -->
+    <link rel="stylesheet" href="./yaju-home-com.css">
+    <!-- script -->
+    <script src="./yaju-home-com.js" defer></script>
+    <!-- メニューボタン -->
+    <button class="menu-btn" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-menu" aria-haspopup="true">
+        <span class="menu-btn__bar"></span>
+        <span class="menu-btn__bar"></span>
+        <span class="menu-btn__bar"></span>
+    </button>
+</head>
+<body>
+    <main>
+        <header class="hero-header">
+            <h1 class="header-yajutei">野獣邸</h1>
         </header>
+
+        <!-- ===== ナビゲーションメニュー ===== -->
+        <nav class="menu" id="site-menu" aria-label="サイトナビゲーション" aria-hidden="true">
+            <div class="menu__inner">
+                <ul class="menu__list">
+                    <li class="menu__item"><a class="menu__link" href="./index.html">ホーム</a></li>
+                    <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true">非公式Fluxerに参加</a></li>
+                    <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true">今週のクイズ</a></li>
+                    <li class="menu__item"><a class="menu__link" href="https://discord.gg/yjsnpi" target="_blank" rel="noopener noreferrer">Discordサーバー</a></li>
+                </ul>
+                <p class="menu__logo" aria-hidden="true">野獣邸</p>
+            </div>
+        </nav>
+        <button class="menu-backdrop" type="button" tabindex="-1" aria-hidden="true"></button>
+
         <section class="main">
-            <dev class="main-header">
-            <p class="main-header-first">本サイトはDiscordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。</p>
-            <span class="main-header-warn" style="color: red;">本サイトはコートコーポレーション社事務所兼撮影スタジオ(通称: 野獣邸)及び、これに関係するいかなる組織、団体との関係は一切ありません。</span>
-            </dev>
-            <dev class="main-today's_video">
-                <p class="main-today's_video-first">今日の婬夢動画</p>
+            <div class="main-header">
+                <p class="main-header-title">まずうちさぁ、屋上...あんだけど、焼いてかない?</p>
+                <p class="main-header-first">本サイトはDiscordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。</p>
+                <span class="main-header-warn" style="color: red;">本サイトはコートコーポレーション社事務所兼撮影スタジオ(通称: 野獣邸)及び、これに関係するいかなる組織、団体との関係は一切ありません。</span>
+            </div>
+            
+            <div class="main-today's_video">
+                <p class="main-today's_video-first">今日の淫夢動画</p>
                 <p>please wait for organize</p>
-            </dev>
-            <dev class="main-weakly_quiz">
+            </div>
+            
+            <div class="main-weakly_quiz">
                 <p class="main-weakly_quiz-first">今週のクイズ</p>
                 <p>please wait for organize</p>
-            </dev>
+            </div>
         </section>
+
         <footer>
-            <h1 class="f-h1">野獣邸 | 野獣先輩Tag</p>
-            
+            <!--<h1 class="f-h1">野獣邸 | 野獣先輩Tag</h1>-->
+            <h1 class="google-sans">野獣邸 | 野獣先輩Tag</h1>
         </footer>
-    </home>
+    </main>
+</body>
 </html>
