@@ -8,7 +8,11 @@
 /* ---------- Fonts ---------- */
 @font-face {
   font-family: 'kouzanbrushfont';
+<<<<<<< HEAD
   src: url('items\\kouzanbrushfontotf-subset.ttf') format('truetype');
+=======
+  src: url('items\\KouzanMouhituFontOTF.otf') format('opentype');
+>>>>>>> 6d7463951815f768df558ca38f1cafedbf6a706d
   font-display: swap;  /*フォント読み込み中もテキストを表示*/
 }
 /* ---------- Design tokens ---------- */
