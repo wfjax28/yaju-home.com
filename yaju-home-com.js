@@ -1,14 +1,15 @@
 /* ============================================================
    野獣邸.com - 非公式ファンサイト
-   インタラクション（スクロール演出 / カード3Dチルト）
+   インタラクション（スクロール演出 / カード3Dチルト / スクロールヒント / メニュー開閉）
    ============================================================ */
 (function () {
   'use strict';
 
-  /* ---------- 1. スクロール連動のリビール ---------- */
   const reduceMotion = window.matchMedia(
     '(prefers-reduced-motion: reduce)'
   ).matches;
+
+  /* ---------- 1. スクロール連動のリビール ---------- */
   const revealEls = document.querySelectorAll('.reveal');
 
   if (!reduceMotion && 'IntersectionObserver' in window && revealEls.length) {
@@ -28,19 +29,27 @@
     revealEls.forEach((el) => el.classList.add('is-visible'));
   }
 
-  /* ---------- 2. カードの3Dチルト（マウス操作デバイスのみ）←重いから消す ---------- */
-const cards = document.querySelectorAll('.card');
+  /* ---------- 2. カードの3Dチルト（マウス操作デバイスのみ） ---------- */
+  const cards = document.querySelectorAll('.card');
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
   if (!reduceMotion && finePointer.matches && cards.length) {
     cards.forEach((card) => {
       let rafId = null;
+      let transitionTimer = null;
       const glow = card.querySelector('.card__glow');
 
-      // ホバー開始時にCSSトランジションをオフ（即座にカーソルへ追従させるため）
+      // カーソルが入った瞬間だけ一時的にトランジションを有効化
       card.addEventListener('mouseenter', () => {
-        card.style.transition = 'none';
-        if (glow) glow.style.transition = 'none';
+        card.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+        if (glow) glow.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+
+        // 最初のスムーズな移動が終わったらトランジションを外して、以降のmousemove追従をダイレクトにする
+        clearTimeout(transitionTimer);
+        transitionTimer = setTimeout(() => {
+          card.style.transition = 'none';
+          if (glow) glow.style.transition = 'none';
+        }, 200); // 0.2s（200ms）後に解除
       });
 
       card.addEventListener('mousemove', (e) => {
@@ -68,16 +77,112 @@ const cards = document.querySelectorAll('.card');
 
       card.addEventListener('mouseleave', () => {
         if (rafId) cancelAnimationFrame(rafId);
+        clearTimeout(transitionTimer);
 
-        // トランジションを元に戻し、スムーズに初期位置へ復帰
-        card.style.transition = '';
+        // マウスが離れたらトランジションを付与して元に戻す
+        card.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
         card.style.transform = '';
 
         if (glow) {
-          glow.style.transition = '';
+          glow.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
           glow.style.transform = '';
         }
       });
     });
   }
+
+  /* ---------- 3. スクロールヒントの表示・非表示制御 ---------- */
+  const scrollHintEl = document.querySelector('.site-header__scroll');
+  const scrollThreshold = 100; // トップからの距離の閾値(px)
+
+  if (scrollHintEl) {
+    const toggleWheelVisibility = () => {
+      // ページの最上部から 100px 以内にいる時だけ表示
+      if (window.scrollY <= scrollThreshold) {
+        scrollHintEl.classList.add('is-wheel-visible');
+      } else {
+        scrollHintEl.classList.remove('is-wheel-visible');
+      }
+    };
+
+    if (reduceMotion) {
+      // モーション抑制中は常に表示しておく
+      scrollHintEl.classList.add('is-wheel-visible');
+    } else {
+      toggleWheelVisibility(); // 初期状態のチェック
+      window.addEventListener('scroll', toggleWheelVisibility, { passive: true });
+    }
+  }
+
+  /* ---------- 4. ナビゲーションメニューの開閉処理 ---------- */
+  const menuBtn = document.querySelector('.menu-btn');
+  const menuEl = document.getElementById('site-menu');
+  const backdropEl = document.querySelector('.menu-backdrop');
+
+  if (menuBtn) {
+    // 現在の開閉状態
+    const isOpen = () => menuBtn.classList.contains('is-active');
+
+    // 開閉状態をまとめて切り替える（パネル / ぼかしオーバーレイ / bodyロック）
+    const setMenuOpen = (open) => {
+      menuBtn.classList.toggle('is-active', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+
+      if (menuEl) {
+        menuEl.classList.toggle('is-open', open);
+        menuEl.setAttribute('aria-hidden', String(!open));
+      }
+      if (backdropEl) backdropEl.classList.toggle('is-active', open);
+
+      // menu-open 中は背後を静止画として固定（ブラーの再計算を抑止）
+      document.body.classList.toggle('menu-open', open);
+    };
+
+    // 開閉ボタン
+    menuBtn.addEventListener('click', () => setMenuOpen(!isOpen()));
+
+    // 背後クリックで閉じる
+    if (backdropEl) {
+      backdropEl.addEventListener('click', () => setMenuOpen(false));
+    }
+
+    // メニュー内のリンクをクリックしたら閉じる
+    if (menuEl) {
+      menuEl.addEventListener('click', (e) => {
+        if (e.target.closest('.menu__link')) setMenuOpen(false);
+      });
+    }
+
+    // Esc キーでも閉じられるように
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) setMenuOpen(false);
+    });
+  }
 })();
+const icons = document.querySelectorAll('.card__icon img');
+
+icons.forEach((img) => {
+  let vibeId = null;
+
+  // 親要素（.card や .card-link）にホバーした時に発動
+  const parentCard = img.closest('.card-link') || img.closest('.card');
+
+  parentCard.addEventListener('mouseenter', () => {
+    const loop = () => {
+      // 0.7 〜 1.3 の範囲で毎フレーム完全にランダムな縦横比を生成
+      const scaleX = (0.7 + Math.random() * 0.6).toFixed(2);
+      const scaleY = (0.7 + Math.random() * 0.6).toFixed(2);
+      // -20deg 〜 20deg のランダムな回転
+      const rotate = (-20 + Math.random() * 40).toFixed(2);
+
+      img.style.transform = `scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)`;
+      vibeId = requestAnimationFrame(loop);
+    };
+    loop();
+  });
+
+  parentCard.addEventListener('mouseleave', () => {
+    if (vibeId) cancelAnimationFrame(vibeId);
+    img.style.transform = ''; // 元の形状に戻す
+  });
+});

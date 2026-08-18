@@ -8,8 +8,8 @@
 /* ---------- Fonts ---------- */
 @font-face {
   font-family: 'kouzanbrushfont';
-  src: url('items\\kouzanbrushfontotf-subset.ttf') format('truetype');
-  /* font-display: swap; フォント読み込み中もテキストを表示 */
+  src: url('items\\KouzanMouhituFontOTF.otf') format('opentype');
+  font-display: swap;  /*フォント読み込み中もテキストを表示*/
 }
 /* ---------- Design tokens ---------- */
 :root {
@@ -61,8 +61,8 @@ body::before {
     radial-gradient(40% 40% at 86% 20%, rgba(255, 179, 71, 0.16), transparent 60%),
     radial-gradient(50% 50% at 60% 96%, rgba(120, 70, 180, 0.16), transparent 62%),
     var(--c-bg);
-  animation: Aurora 22s ease-in-out infinite alternate;
-  filter: blur(30px);
+  /*animation: Aurora 22s ease-in-out infinite alternate;
+  filter: blur(30px);*/
 }
 
 /* ---------- Keyframes ---------- */
@@ -117,6 +117,198 @@ body::before {
   overflow: hidden;
   isolation: isolate;
 }
+/* 左上固定のメニューボタン */
+.menu-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100; /* 他の要素より前面に表示 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  background: var(--c-surface, rgba(30, 26, 38, 0.8));
+  border: 1px solid var(--c-border, rgba(255, 179, 71, 0.3));
+  border-radius: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.menu-btn:hover {
+  border-color: var(--c-primary, #ffb347);
+  transform: scale(1.05);
+}
+
+/* ボタン内の3本線 */
+.menu-btn__bar {
+  width: 100%;
+  height: 2px;
+  background-color: var(--c-text, #f6efe4);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* メニューが開いた時の「×」変形 */
+.menu-btn.is-active .menu-btn__bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-btn.is-active .menu-btn__bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-btn.is-active .menu-btn__bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* ============================================================
+   Navigation menu (drawer panel)
+   ============================================================ */
+/* 背後ページをぼかすオーバーレイ（フェードインでブラーを適用） */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(11, 10, 14, 0.42);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease;
+}
+
+.menu-backdrop.is-active {
+  opacity: 1;
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* ナビゲーションパネル本体（画面の約1/3幅まで展開） */
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 95; /* コンテンツより前面、ただし開閉ボタン(100)よりは背面 */
+  width: min(34vw, 28rem);
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(4.5rem, 12vh, 6.5rem) clamp(1.6rem, 4vw, 2.6rem) clamp(1.6rem, 4vw, 2.4rem);
+  background: linear-gradient(165deg, rgba(28, 24, 36, 0.92), rgba(11, 10, 14, 0.97));
+  -webkit-backdrop-filter: blur(14px);
+  /*backdrop-filter: blur(14px);*/
+  border-right: 1px solid var(--c-border);
+  box-shadow: 24px 0 60px rgba(0, 0, 0, 0.5);
+  transform: translateX(-105%);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menu::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--c-primary), var(--c-accent));
+  opacity: 0.55;
+}
+
+.menu.is-open { transform: translateX(0); }
+
+.menu__inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.menu__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: auto;   /* リストを上部に残る空間の中央へ */
+  margin-bottom: auto; /* ロゴは最下部に固定 */
+}
+
+.menu__link {
+  position: relative;
+  display: block;
+  padding: 0.5em 0.4em;
+  /* font-family: var(--font-logo); */
+  font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+  letter-spacing: 0.08em;
+  color: var(--c-text);
+  text-decoration: none;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.menu__link::after {
+  content: "";
+  position: absolute;
+  left: 0.4em;
+  bottom: 0.35em;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--c-primary), var(--c-accent));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.menu__link:hover {
+  color: var(--c-primary);
+  transform: translateX(6px);
+}
+
+.menu__link:hover::after { width: 2.2em; }
+
+/* 未実装ページ（準備中）は操作不可にしてグレー表示 */
+.menu__link[aria-disabled="true"] {
+  color: var(--c-text-dim);
+  cursor: default;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.menu__link[aria-disabled="true"]::after { display: none; }
+
+/* パネル最下部のロゴ（site-header__title と同じ雰囲気で小型） */
+.menu__logo {
+  margin-top: 0;
+  padding-top: clamp(1.4rem, 5vh, 2.2rem);
+  font-family: var(--font-logo);
+  font-size: clamp(1.7rem, 5vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+  text-align: center;
+  color: var(--c-text);
+  text-shadow: 0 0 16px rgba(255, 179, 71, 0.45), 0 0 40px rgba(255, 94, 58, 0.3);
+}
+
+/* ---------- メニュー表示中：背後を静止画として固定（ブラー再計算の負荷軽減） ---------- */
+body.menu-open {
+  overflow: hidden; /* スクロールロック */
+}
+
+/* 背後でループし続ける無限アニメーションを止め、ぼかし対象を静止させる */
+body.menu-open .site-header::before,
+body.menu-open .site-header__scroll::after {
+  animation-play-state: paused;
+}
+
+/* 小さい画面では1/3幅だと狭すぎるため広めに確保 */
+@media (max-width: 720px) {
+  .menu {
+    width: min(80vw, 20rem);
+  }
+}
 
 /* animated mansion strip */
 .site-header::before {
@@ -156,9 +348,9 @@ body::before {
   border: 1px solid var(--c-border);
   border-radius: 999px;
   padding: 0.4em 1.4em;
-  backdrop-filter: blur(6px);
+  /*backdrop-filter: blur(6px);*/
   margin-bottom: 1.6em;
-  animation: Float 5s ease-in-out infinite;
+  /*animation: Float 5s ease-in-out infinite;*/
 }
 
 .site-header__title {
@@ -196,18 +388,32 @@ body::before {
   box-shadow: 0 0 40px rgba(255, 126, 61, 0.7);
 }
 
-/* scroll hint */
+/* ---------- 1. スクロールヒント全体の基本設定（通常＝消えている状態） ---------- */
+/* ---------- 1. スクロールヒント本体（通常＝消えている状態） ---------- */
 .site-header__scroll {
   position: absolute;
   bottom: 30px;
   left: 50%;
   width: 26px;
   height: 42px;
-  transform: translateX(-50%);
   border: 2px solid rgba(255, 179, 71, 0.5);
   border-radius: 14px;
+
+  /* 非表示状態：中央寄せを維持しながら上に少し移動して消える */
+  opacity: 0;
+  transform: translate(-50%, -20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
 }
 
+/* ---------- 2. トップ時・上スクロール時に付与される表示スタイル ---------- */
+.site-header__scroll.is-wheel-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+/* ---------- 3. 中のマウスホイール（アニメーション） ---------- */
 .site-header__scroll::after {
   content: "";
   position: absolute;
@@ -270,7 +476,7 @@ body::before {
   border: 1px solid var(--c-border);
   border-left: 4px solid var(--c-accent);
   border-radius: 14px;
-  backdrop-filter: blur(8px);
+  /*backdrop-filter: blur(8px); */
   text-align: left;
 }
 
@@ -299,7 +505,7 @@ body::before {
   background: var(--c-surface);
   border: 1px solid var(--c-border);
   border-radius: var(--radius);
-  backdrop-filter: blur(12px);
+  /*backdrop-filter: blur(12px); */
   box-shadow: var(--shadow-lg);
   text-align: center;
   transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
@@ -326,6 +532,13 @@ body::before {
   background: radial-gradient(circle, rgba(255, 179, 71, 0.5), transparent 70%);
 }
 
+/* リンクタグの下線や文字色の変更を無効化 */
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block; /* カード全体にクリック領域を広げる */
+}
+
 .card::after {
   content: "";
   position: absolute;
@@ -349,9 +562,9 @@ body::before {
   transform: translate(8%, 6%);
 }
 
-.card:hover::after {
-  animation: Shine 0.9s ease;
-}
+/*.card:hover::after {
+  animation: Shine 0.9s ease; 
+} */
 
 .card__icon {
   width: 76px;
@@ -364,8 +577,17 @@ body::before {
   background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
   border-radius: 50%;
   box-shadow: var(--glow);
-  animation: Float 4s ease-in-out infinite;
+  /* animation: Float 4s ease-in-out infinite; */
 }
+/* その中の画像の設定 */
+.card__icon img {
+  /* 親要素（.card__icon）の幅・高さに合わせる */
+  width: 75%;
+  height: 75%;
+  /* 縦横比を保ったまま、枠内に収める（はみ出さない） */
+  object-fit: contain;
+}
+
 
 .card__title {
   font-family: var(--font-logo);
@@ -390,7 +612,7 @@ body::before {
   color: var(--c-primary);
   border: 1px solid rgba(255, 179, 71, 0.4);
   border-radius: 999px;
-  animation: Pulse 2.6s ease-in-out infinite;
+  /*animation: Pulse 2.6s ease-in-out infinite;*/
 }
 
 /* ============================================================

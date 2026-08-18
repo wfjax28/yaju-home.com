@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    
     <meta charset="UTF-8">
     <title>野獣邸.com | 非公式サイト</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -13,18 +14,38 @@
     <link rel="stylesheet" href="./yaju-home-com.css">
     <!-- script -->
     <script src="./yaju-home-com.js" defer></script>
+    <!-- メニューボタン -->
+    <button class="menu-btn" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-menu" aria-haspopup="true">
+        <span class="menu-btn__bar"></span>
+        <span class="menu-btn__bar"></span>
+        <span class="menu-btn__bar"></span>
+    </button>
 </head>
 <body>
+    <!-- ===== ナビゲーションメニュー ===== -->
+    <nav class="menu" id="site-menu" aria-label="サイトナビゲーション" aria-hidden="true">
+        <div class="menu__inner">
+            <ul class="menu__list">
+                <li class="menu__item"><a class="menu__link" href="./index.html">ホーム</a></li>
+                <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true">非公式Fluxerに参加</a></li>
+                <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true">今週のクイズ</a></li>
+                <li class="menu__item"><a class="menu__link" href="https://discord.gg/yjsnpi" target="_blank" rel="noopener noreferrer">Discordサーバー</a></li>
+            </ul>
+            <p class="menu__logo" aria-hidden="true">野獣邸</p>
+        </div>
+    </nav>
+    <button class="menu-backdrop" type="button" tabindex="-1" aria-hidden="true"></button>
+
     <!-- ===== Hero / Header ===== -->
     <header class="site-header">
         <div class="site-header__overlay"></div>
         <div class="site-header__content">
             <p class="site-header__label">非公式ファンサイト</p>
             <h1 class="site-header__title">野獣邸</h1>
-            <p class="site-header__subtitle">Discordサーバー「野獣邸 | 野獣先輩Tag」</p>
-            <a class="site-header__cta" href="#content">アイスティーを飲む</a>
+            <p class="site-header__subtitle">Discordサーバー<a href="https://discord.gg/yjsnpi" target="_blank" rel="noopener noreferrer">「野獣邸 | 野獣先輩Tag」</a></p>
+            <a class="site-header__cta" href="#content">あぁ～いいっすねぇ</a>
         </div>
-        <!-- <div class="site-header__scroll" aria-hidden="true"></div> -->
+        <div class="site-header__scroll" aria-hidden="true"></div> 
     </header>
 
     <!-- ===== Main ===== -->
@@ -32,7 +53,7 @@
 
         <!-- ようこそ -->
         <section class="intro reveal">
-            <h2 class="section-title">ようこそ、野獣の棲む館へ</h2>
+            <h2 class="section-title">まずうちさぁ、屋上...あんだけど、<br>焼いてかない?</h2>
             <p class="intro__lead">本サイトはDiscordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。</p>
             <p class="intro__notice">
                 本サイトはコートコーポレーション社事務所兼撮影スタジオ(通称: 野獣邸)及び、
@@ -42,21 +63,25 @@
 
         <!-- コンテンツカード -->
         <section class="cards">
+            <a href="javascript:void(0)" class="card-link">
             <article class="card card--video reveal">
                 <div class="card__glow" aria-hidden="true"></div>
-                <div class="card__icon" aria-hidden="true">▶</div>
-                <h2 class="card__title">今日の婬夢動画</h2>
-                <p class="card__text">ガチのほんへは規制されるので申し訳ないがNG</p>
+                <div class="card__icon" aria-hidden="true"><img src="picture/medikara.png" alt="目力先輩"></div>
+                <h2 class="card__title">非公式Fluxerに参加</h2>
+                <p class="card__text">うんちどばどば</p>
                 <span class="card__badge">COMING SOON</span>
             </article>
+            </a>
 
+            <a href="javascript:void(0)" class="card-link">
             <article class="card card--quiz reveal">
                 <div class="card__glow" aria-hidden="true"></div>
                 <div class="card__icon" aria-hidden="true">?</div>
                 <h2 class="card__title">今週のクイズ</h2>
                 <p class="card__text">野獣先輩は女の子?男の子?</p>
-                <span class="card__badge">COMING SOON</span>
+                <span class="card__badge">CUMING SOON</span>
             </article>
+            </a>
         </section>
     </main>
 
