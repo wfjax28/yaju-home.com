@@ -18,6 +18,12 @@
   color-scheme: light dark;
 }
 
+body{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 header {
   width: 100%;
   height: 20vh;
@@ -50,6 +56,68 @@ header > * {
   font-size: 72px;
 }
 
+.sidebar_system-menu-button {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+  z-index: 999;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* サイドバー */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100vh;
+  background: #222;
+  color: #fff;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  padding-top: 60px;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sidebar a {
+  display: block;
+  padding: 15px 25px;
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  background: #444;
+}
+
 .main-header{
   display: flex;
   flex-direction: column;
@@ -59,18 +127,49 @@ header > * {
   margin: clamp(42px, 8%, 96px) 10%;
 }
 
+.main-header-welcome{
+  display: block;
+  font-size: clamp(20px, 0.94rem + 1.33vw, 32px);
+  margin: 5% 0%;
+}
+
 .main-header-first{
   display: block;
-  font-size: clanp(16px, 10rem, 22px);
+  font-size: clamp(14px, 0.67rem + 0.88vw, 22px);
 }
 
 .main-header-warn{
   display: block;
-  font-size: 24px;
+  font-size: clamp(14px, 1.106rem + 0.727vw, 26px);
   margin: 5% 0%;
 }
 
+.main-notice{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 0.5em 1em;
+  margin: 5% 18vw;
+  font-weight: bold;
+  border: solid 3px yellow;/*線*/
+  border-radius: 10px;/*角の丸み*/
+}
 
+.main-notice h2{
+  font-size: clamp(24px, 1.19rem + 1.33vw, 36px);
+}
+
+.main-notice p {
+  margin: 2vh; 
+  font-size: clamp(0.875rem, 0.67rem + 0.88vw, 1.375rem);
+}
+
+.main-for_newuser h1 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 5%;
+}
 
 footer{
   width: 100%;
@@ -86,7 +185,8 @@ footer::before{
   inset: 0;
   background-image: url(./picture/are.webp);
   background-size: 100% 100%;
-  opacity: 0.7;
+  background-color: black;
+  opacity: 0.5;
   z-index: 0;
 }
 
