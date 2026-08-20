@@ -29,6 +29,10 @@
     --c-menu-bg: rgba(255, 255, 255, 0.92);
     --c-menu-bg-accent: rgba(168, 167, 167, 0.97);
 
+    --radius: 24px;
+    --shadow-lg: 0 30px 70px rgba(0, 0, 0, 0.55);
+    --glow: 0 0 26px rgba(255, 179, 71, 0.4);
+
     /* type */
     --font-body: "Google Sans", "Noto Sans JP", Meiryo, system-ui, sans-serif;
     --font-logo: 'kouzanbrushfont', var(--font-body);
@@ -471,7 +475,7 @@ body.menu-open {
   border: 1px solid var(--c-border);
   border-radius: var(--radius);
   /*backdrop-filter: blur(12px); */
-  box-shadow: var(--shadow-lg);
+  /*box-shadow: var(--shadow-lg); */
   text-align: center;
   transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
@@ -498,7 +502,7 @@ body.menu-open {
 .card:hover {
   /*transform: translateY(-10px); */
   border-color: rgba(255, 179, 71, 0.55);
-  box-shadow: var(--shadow-lg), var(--glow);
+  /*box-shadow: var(--shadow-lg), var(--glow); */
 }
 
 .card:hover .card__glow {
