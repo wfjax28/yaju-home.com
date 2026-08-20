@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Discord メンバー数</title>
+</head>
+<body>
+  <p>総メンバー数: <span id="member-count">読み込み中...</span> 人</p>
+
+  <script>
+    // あなたのサーバーの「招待コード（URLの末尾）」を入れる
+    const INVITE_CODE = 'abcXYZ'; 
+
+    async function getMemberCount() {
+      try {
+        // Discord公式の招待情報API（counts=trueをつけると人数が取れる）
+        const res = await fetch(`https://discord.com/api/v9/invites/yjsnpi?with_counts=true`);
+        const data = await res.json();
+
+        // approximate_member_count が概算の総人数
+        if (data.approximate_member_count) {
+          document.getElementById('member-count').textContent = data.approximate_member_count;
+        } else {
+          document.getElementById('member-count').textContent = '取得失敗';
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById('member-count').textContent = 'エラー';
+      }
+    }
+
+    getMemberCount();
+  </script>
+</body>
+</html>

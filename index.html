@@ -35,8 +35,9 @@
             <div class="menu__inner">
                 <ul class="menu__list">
                     <li class="menu__item"><a class="menu__link" href="./index.html">ホーム</a></li>
-                    <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true">非公式Fluxerに参加</a></li>
+                    <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true">Fluxerに参加</a></li>
                     <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true">今週のクイズ</a></li>
+                    <li class="menu__item"><a class="menu__link" href="./takuya.html" aria-disabled="true">拓也の射精額</a></li>
                     <li class="menu__item"><a class="menu__link" href="https://discord.gg/yjsnpi" target="_blank" rel="noopener noreferrer">Discordサーバー</a></li>
                 </ul>
                 <p class="menu__logo" aria-hidden="true">野獣邸</p>
@@ -68,7 +69,7 @@
             <article class="card card--video reveal">
                 <div class="card__icon" aria-hidden="true"><img src="picture/medikara.png" alt="目力先輩"></div>
                 <h2 class="card__title">Fluxerに参加</h2>
-                <p class="card__text">うんちどばどば</p>
+                <p class="card__text">用途未定</p>
                 <span class="card__badge">間もなくイキソ</span>
             </article>
             </a>
@@ -76,8 +77,16 @@
             <a href="javascript:void(0)" class="card-link">
             <article class="card card--quiz reveal">
                 <div class="card__icon" aria-hidden="true"><img src="picture/yajuthink.png" alt="考える先輩"></div>
-                <h2 class="card__title">今週のクイズ</h2>
-                <p class="card__text">野獣先輩は女の子?男の子?</p>
+                <h2 class="card__title">野獣邸サーバーとは</h2>
+                <p class="card__text">サーバーの基礎情報を突うずるっこむ</p>
+                <span class="card__badge">間もなくイキソ</span>
+            </article>
+            </a>
+            <a href="./takuya.html" class="card-link">
+            <article class="card card--quiz reveal">
+                <div class="card__icon" aria-hidden="true"><img src="picture/crytakuya.png" alt="考える先輩"></div>
+                <h2 class="card__title">拓也の射精額アンケート</h2>
+                <p class="card__text">3000円じゃないかもしれない(適当)</p>
                 <span class="card__badge">間もなくイキソ</span>
             </article>
             </a>
@@ -87,6 +96,51 @@
     <footer class="site-footer">
         <h2 class="site-footer__title">野獣邸 | 野獣先輩Tag</h2>
         <!--<p class="site-footer__copyright">© 野獣邸.com 非公式</p>-->
+            <p>拓也の射精 <span id="count">0</span>円</p>
+            <button id="btn" class="takuya"><img src="picture/takuyahoukou.png"></button>
+
+            <!-- Firebase SDK (v10 modular JS) -->
+            <script type="module">
+                // Import the functions you need from the SDKs you need
+                import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+                import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+                // TODO: Add SDKs for Firebase products that you want to use
+                // https://firebase.google.com/docs/web/setup#available-libraries
+
+                // Your web app's Firebase configuration
+                // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+                const firebaseConfig = {
+                apiKey: "AIzaSyCPCL19S2L2QWxl73C9X64YtTSywGMZdcY",
+                authDomain: "takuyashaseigakudb.firebaseapp.com",
+                databaseURL: "https://takuyashaseigakudb-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "takuyashaseigakudb",
+                storageBucket: "takuyashaseigakudb.firebasestorage.app",
+                messagingSenderId: "755129972234",
+                appId: "1:755129972234:web:73296674f94edbd295d1f3",
+                measurementId: "G-LC7QKVW9R8"
+                };
+
+                // Firebaseの初期化
+                const app = initializeApp(firebaseConfig);
+                const db = getDatabase(app);
+                const counterRef = ref(db, 'click_count');
+
+                const countEl = document.getElementById('count');
+                const btnEl = document.getElementById('btn');
+
+                // 2. サーバーの値が更新されたらリアルタイムで画面に反映
+                onValue(counterRef, (snapshot) => {
+                const data = snapshot.val();
+                countEl.textContent = data !== null ? data : 0;
+                });
+
+                // 3. ボタンを押した時の処理（トランザクション処理で連打や同時押しに対応）
+                btnEl.addEventListener('click', () => {
+                runTransaction(counterRef, (currentValue) => {
+                    return (currentValue || 0) + 1;
+                });
+                });
+            </script>
     </footer>
     </main>
 </body>

@@ -8,7 +8,8 @@
 /* ---------- Fonts ---------- */
 @font-face {
   font-family: 'kouzanbrushfont';
-  src: url('items\\kouzanbrushfontotf-subset.ttf') format('truetype');
+  /* src: url('items\\kouzanbrushfontotf-subset.ttf') format('truetype'); */
+  src: url('items\\KouzanMouhituFontOTF.otf') format('opentype');
   font-display: swap;  /*フォント読み込み中もテキストを表示*/
 }
 
@@ -177,6 +178,9 @@ body::before {
   font-family: "Potta One", system-ui;
   font-weight: 200;
   font-style: normal;
+}
+a {
+  color: var(--c-primary);
 }
 
 /* 外枠：テキストと画像を横並びにする Flex コンテナ */
@@ -455,7 +459,11 @@ body.menu-open {
   letter-spacing: 0.08em;
   color: var(--c-primary);
 }
-
+.takuya{
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 
 /* ============================================================
    Cards
