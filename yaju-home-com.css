@@ -476,7 +476,6 @@ body.menu-open {
   border-radius: var(--radius);
   /*backdrop-filter: blur(12px); */
   /*box-shadow: var(--shadow-lg); */
-  box-shadow: var(--shadow-lg);
   text-align: center;
   transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
@@ -525,7 +524,7 @@ body.menu-open {
   color: #1a1208;
   background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
   border-radius: 50%;
-  box-shadow: var(--glow);
+  /*box-shadow: var(--glow);*/
   /* animation: Float 4s ease-in-out infinite; */
 }
 /* その中の画像の設定 */
