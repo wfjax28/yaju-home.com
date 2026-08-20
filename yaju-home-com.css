@@ -473,7 +473,7 @@ body.menu-open {
   padding: 2.4rem 2rem 2.8rem;
   background: var(--c-surface);
   border: 1px solid var(--c-border);
-  border-radius: var(--radius);
+  border-radius: 0 /*var(--radius)*/;
   /*backdrop-filter: blur(12px); */
   /*box-shadow: var(--shadow-lg); */
   text-align: center;
@@ -481,6 +481,11 @@ body.menu-open {
 }
 
 /* リンクタグの下線や文字色の変更を無効化 */
+.card-link-ikisugi {
+  text-decoration: none;
+  color: inherit;
+  display: block; /* カード全体にクリック領域を広げる */
+}
 .card-link {
   text-decoration: none;
   color: inherit;

@@ -56,20 +56,23 @@ const icons = document.querySelectorAll('.card__icon img');
 icons.forEach((img) => {
   let vibeId = null;
 
-  // 親要素（.card や .card-link）にホバーした時に発動
-  const parentCard = img.closest('.card-link') || img.closest('.card');
+  // 親要素（.card や .card-link-ikisugi）にホバーした時に発動
+  const parentCard = img.closest('.card-link-ikisugi') || img.closest('.card');
 
   parentCard.addEventListener('mouseenter', () => {
+    // .card-link-ikisugiのホバー中のみ発動
     const loop = () => {
-      // 0.7 〜 1.3 の範囲で毎フレーム完全にランダムな縦横比を生成
-      const scaleX = (0.7 + Math.random() * 0.6).toFixed(2);
-      const scaleY = (0.7 + Math.random() * 0.6).toFixed(2);
-      // -20deg 〜 20deg のランダムな回転
-      const rotate = (-20 + Math.random() * 40).toFixed(2);
+      if (parentCard.classList.contains('card-link-ikisugi')) {
+        // 0.7 〜 1.3 の範囲で毎フレーム完全にランダムな縦横比を生成
+        const scaleX = (0.7 + Math.random() * 0.6).toFixed(2);
+        const scaleY = (0.7 + Math.random() * 0.6).toFixed(2);
+        // -20deg 〜 20deg のランダムな回転
+        const rotate = (-20 + Math.random() * 40).toFixed(2);
 
-      img.style.transform = `scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)`;
-      vibeId = requestAnimationFrame(loop);
-    };
+        img.style.transform = `scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)`;
+        vibeId = requestAnimationFrame(loop);
+      };
+  }
     loop();
   });
 
@@ -81,6 +84,7 @@ icons.forEach((img) => {
 
   /* ---------- 2. カードの3Dチルト（マウス操作デバイスのみ） ---------- */
   const cards = document.querySelectorAll('.card');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
   if (!reduceMotion && finePointer.matches && cards.length) {
