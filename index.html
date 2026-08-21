@@ -123,33 +123,31 @@
                 const DATABASE_ID = '6a87e02900253dd1bfc3';
                 const COLLECTION_ID = 'takuya-button';
                 const DOCUMENT_ID = 'main_count';
-const countEl = document.getElementById('count');
+
+                const countEl = document.getElementById('count');
                 const btnEl = document.querySelector('.takuya');
 
                 let localPendingAdd = 0;   // 1秒間に溜まった加算額
                 
-                // --- 時間ベースアニメーション用変数 ---
-                let startDisplayValue = 0; // アニメーション開始時の値
-                let targetDisplayValue = 0;// 目標値
-                let currentDisplayValue = 0;// 内部計算用の現在値
+                // --- カウント＆アニメーション制御変数 ---
+                let startDisplayValue = 0;
+                let targetDisplayValue = 0;
+                let currentDisplayValue = 0;
                 let animationStartTime = null;
                 let animationFrameId = null;
-                const ANIMATION_DURATION = 1000; // アニメーションにかける時間（ミリ秒）: 1秒
+                const ANIMATION_DURATION = 500; // 500ms（他人の更新反映時などのアニメーション時間）
 
-                // イージング関数（easeOutCubic: 最初は速く、後半滑らかに減速）
                 function easeOutCubic(t) {
                     return 1 - Math.pow(1 - t, 3);
                 }
 
-                // 時間ベースのアニメーションループ
+                // 他人からの更新などを受信した際の時間ベースアニメーション
                 function animateCount(timestamp) {
                     if (!animationStartTime) animationStartTime = timestamp;
                     
-                    // 経過時間の割合（0.0 〜 1.0）
                     const progress = Math.min((timestamp - animationStartTime) / ANIMATION_DURATION, 1);
                     const easedProgress = easeOutCubic(progress);
 
-                    // 経過時間に基づいて現在値を計算
                     currentDisplayValue = Math.floor(
                         startDisplayValue + (targetDisplayValue - startDisplayValue) * easedProgress
                     );
@@ -159,7 +157,6 @@ const countEl = document.getElementById('count');
                     if (progress < 1) {
                         animationFrameId = requestAnimationFrame(animateCount);
                     } else {
-                        // アニメーション完了時は確実に目標値にする
                         currentDisplayValue = targetDisplayValue;
                         countEl.textContent = currentDisplayValue.toLocaleString();
                         animationStartTime = null;
@@ -167,18 +164,17 @@ const countEl = document.getElementById('count');
                     }
                 }
 
+                // 通常の目標値設定（アニメーションあり）
                 function setTargetValue(newValue) {
-                    // 現在の表示状態を新たなアニメーションの開始点にする
                     startDisplayValue = currentDisplayValue;
                     targetDisplayValue = newValue;
                     
-                    // アニメーション時間をリセットして新規スタート
                     animationStartTime = null;
                     cancelAnimationFrame(animationFrameId);
                     animationFrameId = requestAnimationFrame(animateCount);
                 }
 
-                // 2. 初期値取得（ページ読み込み時の1回だけ）
+                // 2. 初期値取得
                 async function fetchInitialCount() {
                     try {
                         const doc = await databases.getDocument(
@@ -202,6 +198,7 @@ const countEl = document.getElementById('count');
                     `databases.${DATABASE_ID}.collections.${COLLECTION_ID}.documents.${DOCUMENT_ID}`,
                     (response) => {
                         if (response.payload && response.payload.count !== undefined) {
+                            // 自分の未送信分も含めた値を目標値に設定して滑らかに追従
                             setTargetValue(response.payload.count + localPendingAdd);
                         }
                     }
@@ -232,10 +229,17 @@ const countEl = document.getElementById('count');
                     }
                 }
 
-                // ボタンクリック時
+                // ★ ボタンクリック時：アニメーションを即時キャンセルして画面を直接加算描画
                 btnEl.addEventListener('click', () => {
+                    cancelAnimationFrame(animationFrameId); // 実行中のアニメーションを即停止
+                    animationStartTime = null;
+
                     localPendingAdd += 1;
-                    setTargetValue(targetDisplayValue + 1);
+                    currentDisplayValue += 1;
+                    targetDisplayValue = currentDisplayValue;
+
+                    // 遅延ゼロで即描画！
+                    countEl.textContent = currentDisplayValue.toLocaleString();
                 });
 
                 // 実行開始
