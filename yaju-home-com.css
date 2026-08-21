@@ -243,11 +243,10 @@ a {
     height: 80px;
   }
 }
-.intro__notice {
+.intro__notice,.intro__warn {
   margin-top: 1.8em;
   padding: 1.1em 1.4em;
   font-size: 0.86rem;
-  color: red; /* 元のままにしていますが、見づらければ調整してください */
   background: var(--c-surface);
   border: 1px solid var(--c-border);
   /* border-leftを削除し、疑似要素でラインを表現 */
@@ -256,9 +255,15 @@ a {
   position: relative; /* 疑似要素の位置指定のため */
   overflow: hidden;   /* 角の丸みに沿ってラインを切り取るため */
 }
+.intro__notice{
+  color: var(--c-accent);
+}
+.intro__warn{
+  color: red;
+}
 
 /* 参考画像のようなピンクのラインを追加 */
-.intro__notice::after {
+.intro__notice::after,.intro__warn::after {
   content: '';
   position: absolute;
   top: 0;
@@ -269,13 +274,22 @@ a {
 }
 
 /* paddingを調整して、テキストがラインと重ならないようにする */
-.intro__notice {
+.intro__notice,.intro__warn {
   padding-left: calc(1.4em + 6px); /* 元のpadding + ラインの太さ */
 }
 
+
 /* タイトル部分のスタイル */
-.intro__notice::before {
+.intro__warn::before {
   content: '⚠️南佳也には全く似ていません⚠️';
+  display: block;
+  font-weight: 700;
+  color: red;
+  margin-bottom: 0.4em;
+  letter-spacing: 0.05em;
+}
+.intro__notice::before {
+  content: 'お知らせ';
   display: block;
   font-weight: 700;
   color: var(--c-accent);
