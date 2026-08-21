@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+    <title>野獣邸.com | 非公式サイト</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta name="description" content="Discordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。">
+    <link rel="icon" href="./picture/favicon.png" sizes="any">
+    <link rel="canonical" href="https://yaju-home.com/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Noto+Sans+JP:wght@100..900&family=Potta+One&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./yaju-home-com.css">
+    <script src="./yaju-home-menu.js" defer></script>
+    <script src="./yaju-home-com.js" defer></script>
+
+    <style>
+      .poll-app { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:center; gap:0.5rem; margin:1.5rem auto; max-width:920px; }
+      .poll-app input[type=number] { font-size:2.5rem; width:7em; text-align:center; padding:0.35rem 0.15rem; border:2px solid var(--c-primary); border-radius:0; background:var(--c-surface); color:var(--c-text); font-weight:700; }
+      .poll-app input[type=number]:disabled { opacity:0.55; }
+      .poll-app .yen { font-size:2.5rem; font-weight:800; color:var(--c-primary); font-family: 'Potta One', system-ui;}
+      #vote-btn { display:block; margin:1.2rem auto; font-size:1.9rem; font-weight:900; letter-spacing:0.2em; padding:0.8em 3.5em; color:#fff; background:linear-gradient(135deg, var(--c-primary)); border:none; border-radius:0; cursor:pointer; transform:translateY(0px); transition: 0.2s;}
+      #vote-btn:hover:not(:disabled) {transform: translateY(-2px); transition: 0.2s;}
+      #vote-btn:disabled { opacity:0.55; cursor:not-allowed; }
+      /* ===== 【テスト用】投票リセット(本実装時は削除) ===== */
+      /* #reset-vote-btn { display:block; margin:0.8rem auto; font-size:1rem; padding:0.5em 1.6em; background:var(--c-surface); color:var(--c-text); border:2px solid var(--c-border); border-radius:0; cursor:pointer; } */
+      /* #reset-vote-btn:hover { border-color:var(--c-primary); } */
+      .result-box { max-width:760px; margin:2rem auto; text-align:center; }
+      .result-box h2 { font-size:1.9rem; font-family:var(--font-logo); }
+      .totals { font-size:1.3rem; font-weight:700; }
+      .chart-wrap { display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center; justify-content:center; }
+      #pie-chart { width:250px; height:250px; }
+      .legend { list-style:none; padding:0; text-align:left; min-width:200px; }
+      .legend li { margin:0.35rem 0; font-size:1rem; }
+      .legend-swatch { display:inline-block; width:13px; height:13px; margin-right:0.5rem; border-radius:3px; vertical-align:0; }
+    </style>
+</head>
+<body>
+        <header class="hero-header">
+            <h1 class="header-yajutei">野獣邸</h1>
+        </header>
+
+        <!-- グローバルメニューは yaju-home-menu.js で動的生成(単一ソース) -->
+        <div id="site-menu-root" data-page="takuya"></div>
+
+    <main id="content" class="main-content">
+        <section class="main">
+            <h1 style="font-size:4rem; font-family:var(--font-logo); text-align:center;">拓也の射精 投票円</h1>
+            <p style="font-size:1.25rem; text-align:center;">拓也の射精 3000円といいますが、価格変動リスク感じるんでしたよね？<br>ホモのみんなで拓也さんの射精額を決めよう(提案)</p>
+
+            <!-- ===== 投票フォーム ===== -->
+            <div class="poll-app">
+                <span style="font-size:2.4rem; font-weight:900; color:var(--c-text);  font-family: 'Potta One', system-ui;">拓也の射精</span>
+                <input type="number" id="amount-input" min="1" step="1" inputmode="numeric" autocomplete="off" aria-label="射精額(円)">
+                <span class="yen">円</span>
+            </div>
+            <button type="button" id="vote-btn"><b>投票</b></button>
+            <p style="text-align:center; font-size:0.95rem; color:var(--c-text-dim);" id="hint-msg">投票ゎ1人1回までだよ</p>
+
+            <!-- ===== 【テスト用】ここから =====
+                 投票済みフラグ(ローカル保存)のリセットボタン。
+                 ※ 本実装時は、このボタンと冒頭の #reset-vote-btn スタイル、および
+                   スクリプト末尾の「投票リセット(テスト用)」節をまとめて削除してください。
+            ===== -->
+            <!-- <button type="button" id="reset-vote-btn">投票フラグリセット(テスト用)</button> -->
+            <!-- ===== 【テスト用】ここまで ===== -->
+
+            <!-- ===== 集計結果 ===== -->
+            <div class="result-box">
+                <h2>集計結果</h2>
+                <p class="totals">全投票数: <strong id="total-votes">0</strong>票 / 合計拓射額: <strong id="total-money">0</strong>円</p>
+                <div class="chart-wrap">
+                    <svg id="pie-chart" viewBox="0 0 200 200" width="250" height="250" role="img" aria-label="拓射投票分布"></svg>
+                    <ul class="legend" id="legend"></ul>
+                </div>
+                <p id="result-msg" style="text-align:center; font-weight:bold;"></p>
+            </div>
+        </section>
+    </main>
+
+<!-- Appwrite SDK (v14+) -->
+<script type="module">
+import { Client, Databases, ID } from "https://cdn.jsdelivr.net/npm/appwrite@14.0.1/+esm";
+
+const client = new Client()
+    .setEndpoint('https://sgp.cloud.appwrite.io/v1')
+    .setProject('6a87d78a002c8b5d12eb');
+
+const databases = new Databases(client);
+const DATABASE_ID = '6a87e02900253dd1bfc3';
+const POLL_COLLECTION_ID = 'takuya-poll';
+const LOCAL_VOTED_KEY = 'has_voted_amount';
+const LOCAL_AMOUNT_KEY = 'last_voted_amount';
+
+const amountInput = document.getElementById('amount-input');
+const voteBtn = document.getElementById('vote-btn');
+const resultMsg = document.getElementById('result-msg');
+const totalVotesEl = document.getElementById('total-votes');
+const totalMoneyEl = document.getElementById('total-money');
+const legendEl = document.getElementById('legend');
+const svgEl = document.getElementById('pie-chart');
+
+// ---- SHIFT(試験投票)検出 ----
+let shiftHeld = false;
+document.addEventListener('keydown', (e) => { if (e.key === 'Shift') shiftHeld = true; });
+document.addEventListener('keyup',   (e) => { if (e.key === 'Shift') shiftHeld = false; });
+
+// 円グラフ用パレット
+const COLORS = ['#9b6b03', '#6b3b0f', '#c94f4f', '#3a8c5a', '#2f7f9f', '#7a4fae', '#d4813e', '#4f9f8f'];
+
+// 円グラフの座標計算
+function polarAngle(r, deg) {
+  const rad = (deg - 90) * Math.PI / 180;
+  return [100 + r * Math.cos(rad), 100 + r * Math.sin(rad)];
+}
+
+function drawPie(entries) {
+  const total = entries.reduce((s, e) => s + e.votes, 0);
+  let angle = 0;
+  const paths = [];
+
+  entries.forEach((e, i) => {
+    const sweep = total > 0 ? (e.votes / total) * 360 : 0;
+    const endAngle = angle + sweep;
+    if (sweep > 0) {
+      const p1 = polarAngle(90, angle);
+      const p2 = polarAngle(90, endAngle);
+      const largeArc = sweep <= 180 ? 0 : 1;
+      paths.push(
+        '<path d="M 100 100 L ' + p1[0].toFixed(2) + ' ' + p1[1].toFixed(2) +
+        ' A 90 90 0 ' + largeArc + ' 1 ' + p2[0].toFixed(2) + ' ' + p2[1].toFixed(2) +
+        ' Z" fill="' + COLORS[i % COLORS.length] + '" stroke="#ffffff" stroke-width="1.5"></path>'
+      );
+    }
+    angle = endAngle;
+  });
+  svgEl.innerHTML = paths.join('');
+
+  legendEl.innerHTML = entries.map((e, i) => {
+    const pct = total > 0 ? ((e.votes / total) * 100).toFixed(1) : '0.0';
+    const label = e.isOther ? 'その他' : e.amount.toLocaleString() + '円';
+    return '<li><span class="legend-swatch" style="background:' + COLORS[i % COLORS.length] + '"></span>' +
+      label + ': ' + e.votes + '票 (' + pct + '%)</li>';
+  }).join('') || '<li>まだ投票がありませんスギ</li>';
+}
+
+// 全投票データを取得して合計と円グラフを更新
+async function renderResult() {
+  try {
+    const response = await databases.listDocuments(DATABASE_ID, POLL_COLLECTION_ID);
+    const docs = response.documents.filter(d => typeof d.price === 'number' && typeof d.votes === 'number');
+    let totalVotes = 0, totalMoney = 0;
+    const entries = [];
+    docs.forEach(d => {
+      totalVotes += d.votes;
+      totalMoney += d.price * d.votes;
+      entries.push({ amount: d.price, votes: d.votes });
+    });
+    entries.sort((a, b) => b.votes - a.votes || a.amount - b.amount);
+
+    // 得票数の多い上位10件のみ円グラフに表示し、残りは「その他」として最後にまとめる
+    const chartEntries = entries.slice(0, 10);
+    const rest = entries.slice(10);
+    if (rest.length > 0) {
+      chartEntries.push({
+        amount: null,
+        votes: rest.reduce((sum, d) => sum + d.votes, 0),
+        isOther: true
+      });
+    }
+
+    totalVotesEl.textContent = totalVotes.toLocaleString();
+    totalMoneyEl.textContent = totalMoney.toLocaleString();
+    drawPie(chartEntries);
+  } catch (error) {
+    console.error('集計取得失敗:', error);
+  }
+}
+
+// 金額の投票を送信(重複ならvotes+1、無ければ新規作成)
+// ドキュメントIDを金額ベースに固定する事で、インデックスなしでも重複判定できる
+function isSchemaError(error) {
+  const msg = String(
+    (error && error.message) || (error && error.response) || (error && error.type) || ''
+  );
+  return /unknown attribute|invalid document structure|attribute [a-z]+ does not exist/i.test(msg);
+}
+
+async function upsertVote(amount) {
+  const docId = 'amount_' + amount;
+  try {
+    // 既存ドキュメントをIDで取得(無ければ404相当で throw される想定)
+    let found = false;
+    let curVotes = 0;
+    try {
+      const doc = await databases.getDocument(DATABASE_ID, POLL_COLLECTION_ID, docId);
+      found = true;
+      curVotes = doc.votes || 0;
+    } catch (err) {
+      // ドキュメント未存在なら作成へ
+    }
+
+    if (found) {
+      await databases.updateDocument(DATABASE_ID, POLL_COLLECTION_ID, docId, {
+        votes: curVotes + 1
+      });
+    } else {
+      await databases.createDocument(
+        DATABASE_ID, POLL_COLLECTION_ID, ID.custom(docId),
+        { price: amount, votes: 1 }
+      );
+    }
+    return { ok: true, needsSchema: false };
+  } catch (error) {
+    console.error('投票送信失敗:', error);
+    if (isSchemaError(error)) {
+      return { ok: false, needsSchema: true };
+    }
+    return { ok: false, needsSchema: false };
+  }
+}
+
+function handleVote() {
+  const isTestVote = shiftHeld;
+
+  // 本投票(非SHIFT)かつ投票済みならポップアップで通知して中止
+  if (!isTestVote && localStorage.getItem(LOCAL_VOTED_KEY)) {
+    alert('あなたは投票済みです。ありがとナス！');
+    return;
+  }
+
+  const raw = amountInput.value.trim();
+  if (!/^\d+$/.test(raw) || parseInt(raw, 10) < 1) {
+    alert('自然数(1以上の整数)で入力してくれよな～頼むよ～');
+    return;
+  }
+  const amount = parseInt(raw, 10);
+
+  voteBtn.disabled = true;
+  upsertVote(amount).then((res) => {
+    if (!res.ok) {
+      voteBtn.disabled = false;
+      if (res.needsSchema) {
+        alert('なんか(エラー)犯されてるよぉ(データベースに属性 price(整数)・votes(整数) が未定義です。データベースのコンソールで作成してください。)');
+        console.error('属性未定義: takuya-poll に price(integer), votes(integer) が必要');
+      } else {
+        alert('投票できなかったゾ！数回試して無理だったら管理者に報告よろしくナス！');
+      }
+      return;
+    }
+    if (isTestVote) {
+      voteBtn.disabled = false; // 試験投票は連続可能
+      resultMsg.textContent = '投票しました(試験投票: SHIFTのためローカル保存はされていません)';
+      alert('投票ありがとナス! (!TEST!)');
+    } else {
+      localStorage.setItem(LOCAL_VOTED_KEY, '1');
+      localStorage.setItem(LOCAL_AMOUNT_KEY, String(amount));
+      amountInput.value = '';
+      amountInput.placeholder = amount.toLocaleString(); // 過去の入力値をプレースホルダに表示
+      resultMsg.textContent = '投票ありがとナス! 集計結果を更新しました。';
+      alert('投票ありがとナス!');
+    }
+    renderResult();
+  });
+}
+
+voteBtn.addEventListener('click', handleVote);
+amountInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); handleVote(); }
+});
+
+// ページ読込時: 投票済みならプレースホルダに過去の入力値を設定(ボタンは無効化しない)
+if (localStorage.getItem(LOCAL_VOTED_KEY)) {
+  const last = localStorage.getItem(LOCAL_AMOUNT_KEY);
+  if (last) amountInput.placeholder = Number(last).toLocaleString();
+}
+
+// ===== 【テスト用】ここから =====
+// 投票済みフラグ(ローカル保存)のリセットボタン処理。
+// ※ 本実装時は、この節と #reset-vote-btn ボタン・#reset-vote-btn スタイルを
+//   まとめて削除してください(LOCAL_VOTED_KEY の宣言は残してOK)。
+/* const resetVoteBtn = document.getElementById('reset-vote-btn');
+if (resetVoteBtn) {
+  resetVoteBtn.addEventListener('click', () => {
+    localStorage.removeItem(LOCAL_VOTED_KEY);
+    localStorage.removeItem(LOCAL_AMOUNT_KEY); // 過去の入力値も削除
+    amountInput.value = '';
+    amountInput.placeholder = ''; // プレースホルダも戻す
+    voteBtn.disabled = false;
+    resultMsg.textContent = '投票済みフラグをリセットしました(再投票できます)';
+    alert('投票済みフラグと入力値をリセットしました');
+  }); 
+} */
+// ===== 【テスト用】ここまで =====
+
+renderResult();
+</script>
+</body>
+</html>

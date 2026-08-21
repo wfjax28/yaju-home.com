@@ -16,36 +16,18 @@
 
     <!-- style -->
     <link rel="stylesheet" href="./yaju-home-com.css">
-    <!-- script -->
+    <!-- script (メニュー生成 → メニュー開閉の順で読み込む) -->
+    <script src="./yaju-home-menu.js" defer></script>
     <script src="./yaju-home-com.js" defer></script>
-    <!-- メニューボタン -->
-    <button class="menu-btn" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-menu" aria-haspopup="true">
-        <span class="menu-btn__bar"></span>
-        <span class="menu-btn__bar"></span>
-        <span class="menu-btn__bar"></span>
-    </button>
 </head>
 <body>
         <header class="hero-header">
             <h1 class="header-yajutei">野獣邸</h1>
         </header>
 
-        <!-- ===== ナビゲーションメニュー ===== -->
-        <nav class="menu" id="site-menu" aria-label="サイトナビゲーション" aria-hidden="true">
-            <div class="menu__inner">
-                <ul class="menu__list">
-                    <li class="menu__item"><a class="menu__link" href="./index.html"><img class="menu__icon" src="picture/medikara.png" alt="" aria-hidden="true">ホーム</a></li>
-                    <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true"><img class="menu__icon" src="picture/yajuthink.png" alt="" aria-hidden="true">はじめに</a></li>
-                    <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true"><img class="menu__icon" src="picture/are.webp" alt="" aria-hidden="true">今日の婬夢</a></li>
-                    <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true"><img class="menu__icon" src="picture/takuyahoukou.png" alt="" aria-hidden="true">イベント</a></li>
-                    <li class="menu__item"><a class="menu__link" href="javascript:void(0)" aria-disabled="true"><img class="menu__icon" src="picture/goface.png" alt="" aria-hidden="true">ホモの歴史</a></li>
+        <!-- グローバルメニューは yaju-home-menu.js で動的生成(単一ソース) -->
+        <div id="site-menu-root" data-page="index"></div>
 
-                    <li class="menu__item"><a class="menu__link" href="https://discord.gg/yjsnpi" target="_blank" rel="noopener noreferrer"><img class="menu__icon" src="picture/favicon.png" alt="" aria-hidden="true">野獣邸に参加</a></li>
-                </ul>
-                <p class="menu__logo" aria-hidden="true">野獣邸</p>
-            </div>
-        </nav>
-        <button class="menu-backdrop" type="button" tabindex="-1" aria-hidden="true"></button>
     <main id="content" class="main-content">
         <section class="main">
             <div class="main-header">
@@ -84,12 +66,12 @@
                 <span class="card__badge">間もなくイキソ</span>
             </article>
             </a>
-            <a href="javascript:void(0)" class="card-link">
+            <a href="takusha.html" class="card-link">
             <article class="card card--quiz reveal">
-                <div class="card__icon" aria-hidden="true"><img src="picture/crytakuya.png" alt="哀叫拓也"></div>
+                <div class="card__icon" aria-hidden="true"><img src="picture/takuyahoukou.png" alt="哀叫拓也"></div>
                 <h2 class="card__title">拓也の射精額アンケート</h2>
                 <p class="card__text">3000円じゃないかもしれない(適当)</p>
-                <span class="card__badge">間もなくイキソ</span>
+                <span class="card__badge">クリックしてイク</span>
             </article>
             </a>
             <a href="javascript:void(0)" class="card-link">
