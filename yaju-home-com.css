@@ -149,7 +149,7 @@ body::after {
   position: relative;
   
   /* 背景画像の設定 */
-  background-image: url('picture\\yajutei-on-header.png'); /* 画像のパス */
+  background-image: url('picture\\yajutei-on-header.webp'); /* 画像のパス */
   background-size: 100%; /* 100%以上に設定して画像をズームする */
   background-position: center; /* ズームの中心位置（例: 中央） */
   background-repeat: no-repeat;
@@ -442,7 +442,7 @@ a {
 
 .menu__link[aria-disabled="true"]::after { display: none; }
 
-/* メニュー文字列の前に置く絵文字風の小さなアイコン画像（試験中は medikara.png を全項目で使用） */
+/* メニュー文字列の前に置く絵文字風の小さなアイコン画像（試験中は medikara.webp を全項目で使用） */
 .menu__link .menu__icon {
   display: inline-block;
   width: 1.15em;            /* 文字サイズに追従する小ささ（絵文字風） */

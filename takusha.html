@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="referrer" content="no-referrer">
     <meta name="description" content="Discordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。">
-    <link rel="icon" href="./picture/favicon.png" sizes="any">
+    <link rel="icon" href="./picture/favicon.webp" sizes="any">
     <link rel="canonical" href="https://yaju-home.com/">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +58,7 @@
                 <span class="yen">円</span>
             </div>
             <button type="button" id="vote-btn"><b>投票</b></button>
-            <p style="text-align:center; font-size:0.95rem; color:var(--c-text-dim);" id="hint-msg">投票ゎ1人1回までだよ</p>
+            <p style="text-align:center; font-size:0.95rem; color:var(--c-text-dim);" id="hint-msg">投票は今月限りで無制限にできるゾ(来月から1日1票)</p>
 
             <!-- ===== 【テスト用】ここから =====
                  投票済みフラグ(ローカル保存)のリセットボタン。
@@ -71,7 +71,7 @@
             <!-- ===== 集計結果 ===== -->
             <div class="result-box">
                 <h2>集計結果</h2>
-                <p class="totals">全投票数: <strong id="total-votes">0</strong>票 / 合計拓射額: <strong id="total-money">0</strong>円</p>
+                <p class="totals">全投票数: <strong id="total-votes">0</strong>票 / 合計拓射額: <strong id="total-money">0</strong>円 / 平均額: <strong id="total-avg">0</strong>円</p>
                 <div class="chart-wrap">
                     <svg id="pie-chart" viewBox="0 0 200 200" width="250" height="250" role="img" aria-label="拓射投票分布"></svg>
                     <ul class="legend" id="legend"></ul>
@@ -92,14 +92,65 @@ const client = new Client()
 const databases = new Databases(client);
 const DATABASE_ID = '6a87e02900253dd1bfc3';
 const POLL_COLLECTION_ID = 'takuya-poll';
-const LOCAL_VOTED_KEY = 'has_voted_amount';
-const LOCAL_AMOUNT_KEY = 'last_voted_amount';
+//const LOCAL_VOTED_KEY = 'has_voted_amount';
+//const LOCAL_VOTED_KEY = 'has_voted_amount';   // 'once' モード用: 1人1回フラグ
+const LOCAL_AMOUNT_KEY = 'last_voted_amount'; // 直近の投票金額(プレースホルダ表示用)
+const LOCAL_DAILY_KEY = 'last_voted_date';    // 'daily' モード用: 最終投票日(YYYY-MM-DD)
+
+// ============================================================
+// 投票制限モードの設定
+//   'unlimited' : 今は無制限(1人何票でも投票できる)
+//   'once'      : 1人あたり全部で1票
+//   'daily'     : 1人あたり1日1票
+// この値を書き換えるだけで切り替え可能(localStorageベースの簡易実装)。
+// ※ 本番の厳格な制限にはサーバー側での実装が望ましい。
+// ============================================================
+const VOTE_LIMIT_MODE = 'unlimited';
+
+// 今日の日付(YYYY-MM-DD, その端末のローカル日時)
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// 現在のモードで「1票でも投票できる」かどうか
+function isVoteAllowed() {
+  switch (VOTE_LIMIT_MODE) {
+    case 'once':
+      return !localStorage.getItem(LOCAL_VOTED_KEY);
+    case 'daily':
+      return localStorage.getItem(LOCAL_DAILY_KEY) !== todayStr();
+    case 'unlimited':
+    default:
+      return true; // 無制限: 常に許可
+  }
+}
+
+// 制限で弾かれた時のメッセージ
+function limitDeniedMessage() {
+  if (VOTE_LIMIT_MODE === 'daily') {
+    return '今日の投票はもう終わってるナス！また明日頼むゾ～';
+  }
+  return 'あなたは投票済みです。ありがとナス！';
+}
+
+// 本投票成功(非SHIFT)時のローカル記録。
+// 'once' なら1回フラグ、'daily' なら今日の日付を記録。無制限ならフラグ不要。
+function recordVote(amount) {
+  if (VOTE_LIMIT_MODE === 'once') {
+    localStorage.setItem(LOCAL_VOTED_KEY, '1');
+  } else if (VOTE_LIMIT_MODE === 'daily') {
+    localStorage.setItem(LOCAL_DAILY_KEY, todayStr());
+  }
+  // 直近の投票金額はどのモードでも保存(プレースホルダ表示に使う)
+  localStorage.setItem(LOCAL_AMOUNT_KEY, String(amount));
+}
 
 const amountInput = document.getElementById('amount-input');
 const voteBtn = document.getElementById('vote-btn');
 const resultMsg = document.getElementById('result-msg');
 const totalVotesEl = document.getElementById('total-votes');
 const totalMoneyEl = document.getElementById('total-money');
+const totalAvgEl = document.getElementById('total-avg');
 const legendEl = document.getElementById('legend');
 const svgEl = document.getElementById('pie-chart');
 
@@ -141,7 +192,7 @@ function drawPie(entries) {
 
   legendEl.innerHTML = entries.map((e, i) => {
     const pct = total > 0 ? ((e.votes / total) * 100).toFixed(1) : '0.0';
-    const label = e.isOther ? 'その他' : e.amount.toLocaleString() + '円';
+    const label = e.isOther ? 'その他' : e.amount.toString() + '円';
     return '<li><span class="legend-swatch" style="background:' + COLORS[i % COLORS.length] + '"></span>' +
       label + ': ' + e.votes + '票 (' + pct + '%)</li>';
   }).join('') || '<li>まだ投票がありませんスギ</li>';
@@ -172,8 +223,11 @@ async function renderResult() {
       });
     }
 
-    totalVotesEl.textContent = totalVotes.toLocaleString();
-    totalMoneyEl.textContent = totalMoney.toLocaleString();
+    totalVotesEl.textContent = totalVotes.toString();
+    totalMoneyEl.textContent = totalMoney.toString();
+    // 平均額 = 合計額 / 全投票数(票数0なら0円)
+    const avg = totalVotes > 0 ? Math.round(totalMoney / totalVotes) : 0;
+    totalAvgEl.textContent = avg.toString();
     drawPie(chartEntries);
   } catch (error) {
     console.error('集計取得失敗:', error);
@@ -226,9 +280,9 @@ async function upsertVote(amount) {
 function handleVote() {
   const isTestVote = shiftHeld;
 
-  // 本投票(非SHIFT)かつ投票済みならポップアップで通知して中止
-  if (!isTestVote && localStorage.getItem(LOCAL_VOTED_KEY)) {
-    alert('あなたは投票済みです。ありがとナス！');
+  // 本投票(非SHIFT)だけ制限を適用する(SHIFTは試験投票なので無制限)
+  if (!isTestVote && !isVoteAllowed()) {
+    alert(limitDeniedMessage());
     return;
   }
 
@@ -256,10 +310,9 @@ function handleVote() {
       resultMsg.textContent = '投票しました(試験投票: SHIFTのためローカル保存はされていません)';
       alert('投票ありがとナス! (!TEST!)');
     } else {
-      localStorage.setItem(LOCAL_VOTED_KEY, '1');
-      localStorage.setItem(LOCAL_AMOUNT_KEY, String(amount));
+      recordVote(amount); // モードに応じたローカル記録(無制限なら金額のみ保存)
       amountInput.value = '';
-      amountInput.placeholder = amount.toLocaleString(); // 過去の入力値をプレースホルダに表示
+      amountInput.placeholder = amount.toString(); // 過去の入力値をプレースホルダに表示
       resultMsg.textContent = '投票ありがとナス! 集計結果を更新しました。';
       alert('投票ありがとナス!');
     }
@@ -272,10 +325,10 @@ amountInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') { e.preventDefault(); handleVote(); }
 });
 
-// ページ読込時: 投票済みならプレースホルダに過去の入力値を設定(ボタンは無効化しない)
-if (localStorage.getItem(LOCAL_VOTED_KEY)) {
+// ページ読込時: 現在モードで「投票済み/今日投票済み」ならプレースホルダに過去の金額を表示
+if (!isVoteAllowed()) {
   const last = localStorage.getItem(LOCAL_AMOUNT_KEY);
-  if (last) amountInput.placeholder = Number(last).toLocaleString();
+  if (last) amountInput.placeholder = Number(last).toString();
 }
 
 // ===== 【テスト用】ここから =====
@@ -286,6 +339,7 @@ if (localStorage.getItem(LOCAL_VOTED_KEY)) {
 if (resetVoteBtn) {
   resetVoteBtn.addEventListener('click', () => {
     localStorage.removeItem(LOCAL_VOTED_KEY);
+    localStorage.removeItem(LOCAL_DAILY_KEY); // 'daily' モード用の日付記録もリセット
     localStorage.removeItem(LOCAL_AMOUNT_KEY); // 過去の入力値も削除
     amountInput.value = '';
     amountInput.placeholder = ''; // プレースホルダも戻す

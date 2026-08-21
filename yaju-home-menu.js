@@ -19,12 +19,12 @@
   // ---- ここがメニュー項目の単一ソース ---- ※複数ページ共通
   const MENU_SECTIONS = [
     { label: 'ホーム',        href: './index.html',                          icon: 'picture/are.webp' },
-    { label: 'はじめに',      href: '#disabled',                             icon: 'picture/yajuthink.png' },
-    { label: '今日の婬夢',    href: '#disabled',                             icon: 'picture/medikara.png' },
-    { label: 'イベント',      href: '#disabled',                             icon: 'picture/yajuhappy.png' },
-    { label: 'ホモの歴史',    href: '#disabled',                             icon: 'picture/goface.png' },
-    { label: '拓也の射精 投票円', href:'takusha.html', icon:'picture/takuyahoukou.png'},
-    { label: '野獣邸に参加',  href: 'https://discord.gg/yjsnpi', target: '_blank', rel: 'noopener noreferrer', icon: 'picture/favicon.png' },
+    { label: 'はじめに',      href: '#disabled',                             icon: 'picture/yajuthink.webp' },
+    { label: '今日の婬夢',    href: '#disabled',                             icon: 'picture/medikara.webp' },
+    { label: 'イベント',      href: '#disabled',                             icon: 'picture/yajuhappy.webp' },
+    { label: 'ホモの歴史',    href: '#disabled',                             icon: 'picture/goface.webp' },
+    { label: '拓也の射精 投票円', href:'takusha.html', icon:'picture/takuyahoukou.webp'},
+    { label: '野獣邸に参加',  href: 'https://discord.gg/yjsnpi', target: '_blank', rel: 'noopener noreferrer', icon: 'picture/favicon.webp' },
   ];
 
   // 項目のHTML組み立て（href='#disabled' は無効項目として描画）
