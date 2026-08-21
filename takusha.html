@@ -77,6 +77,7 @@
                     <ul class="legend" id="legend"></ul>
                 </div>
                 <p id="result-msg" style="text-align:center; font-weight:bold;"></p>
+                <button type="button" id="expand-all-btn" style="display:block; margin:0.8rem auto; font-size:1rem; padding:0.5em 1.6em; background:var(--c-surface); color:var(--c-text); border:2px solid var(--c-border); border-radius:0; cursor:pointer;">すべての投票項目を表示</button>
             </div>
         </section>
     </main>
@@ -199,6 +200,9 @@ function drawPie(entries) {
 }
 
 // 全投票データを取得して合計と円グラフを更新
+// expandAll = true なら「その他」にまとめず全件を展開表示
+let expandAll = false;
+
 async function renderResult() {
   try {
     const response = await databases.listDocuments(DATABASE_ID, POLL_COLLECTION_ID);
@@ -212,15 +216,21 @@ async function renderResult() {
     });
     entries.sort((a, b) => b.votes - a.votes || a.amount - b.amount);
 
-    // 得票数の多い上位10件のみ円グラフに表示し、残りは「その他」として最後にまとめる
-    const chartEntries = entries.slice(0, 10);
-    const rest = entries.slice(10);
-    if (rest.length > 0) {
-      chartEntries.push({
-        amount: null,
-        votes: rest.reduce((sum, d) => sum + d.votes, 0),
-        isOther: true
-      });
+    let chartEntries;
+    if (expandAll) {
+      // 全件をそのまま展開表示
+      chartEntries = entries;
+    } else {
+      // 得票数の多い上位10件のみ円グラフに表示し、残りは「その他」として最後にまとめる
+      chartEntries = entries.slice(0, 10);
+      const rest = entries.slice(10);
+      if (rest.length > 0) {
+        chartEntries.push({
+          amount: null,
+          votes: rest.reduce((sum, d) => sum + d.votes, 0),
+          isOther: true
+        });
+      }
     }
 
     totalVotesEl.textContent = totalVotes.toString();
@@ -349,6 +359,17 @@ if (resetVoteBtn) {
   }); 
 } */
 // ===== 【テスト用】ここまで =====
+
+// 「すべての投票項目を表示」ボタン: 押すと全件展開でグラフを再描画し、ボタンを無効化
+const expandAllBtn = document.getElementById('expand-all-btn');
+if (expandAllBtn) {
+  expandAllBtn.addEventListener('click', () => {
+    expandAll = true;
+    expandAllBtn.disabled = true;
+    expandAllBtn.textContent = 'すべての投票項目を表示しています';
+    renderResult();
+  });
+}
 
 renderResult();
 </script>
