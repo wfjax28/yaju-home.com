@@ -122,6 +122,19 @@ body::before {
     var(--c-bg);
 }
 
+/* ikisugi.gif を透明度10％で敷き詰める背景レイヤー（背景色は変更しない） */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  background-image: url('picture\\ikisugi.gif');
+  background-repeat: repeat; /* 詰め込めるだけ敷き詰める */
+  background-size: auto;      /* GIF の元サイズ(270x200)を維持して隙間なく敷き詰める */
+  opacity: 0.10;              /* 透明度10％ */
+  pointer-events: none;
+}
+
 .main-content {
   position: relative;
   max-width: 1080px;
@@ -234,17 +247,35 @@ a {
   margin-top: 1.8em;
   padding: 1.1em 1.4em;
   font-size: 0.86rem;
-  color: red;
+  color: red; /* 元のままにしていますが、見づらければ調整してください */
   background: var(--c-surface);
   border: 1px solid var(--c-border);
-  border-left: 4px solid var(--c-accent);
+  /* border-leftを削除し、疑似要素でラインを表現 */
   border-radius: 14px;
-  /*backdrop-filter: blur(8px); */
   text-align: left;
+  position: relative; /* 疑似要素の位置指定のため */
+  overflow: hidden;   /* 角の丸みに沿ってラインを切り取るため */
 }
 
+/* 参考画像のようなピンクのラインを追加 */
+.intro__notice::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px; /* ラインの太さ（参考画像に合わせて太めに設定） */
+  height: 100%;
+  background-color: var(--c-accent); /* 参考画像のピンク色 */
+}
+
+/* paddingを調整して、テキストがラインと重ならないようにする */
+.intro__notice {
+  padding-left: calc(1.4em + 6px); /* 元のpadding + ラインの太さ */
+}
+
+/* タイトル部分のスタイル */
 .intro__notice::before {
-  content: "⚠ 注意";
+  content: '⚠️南佳也には全く似ていません⚠️';
   display: block;
   font-weight: 700;
   color: var(--c-accent);
@@ -410,6 +441,19 @@ a {
 }
 
 .menu__link[aria-disabled="true"]::after { display: none; }
+
+/* メニュー文字列の前に置く絵文字風の小さなアイコン画像（試験中は medikara.png を全項目で使用） */
+.menu__link .menu__icon {
+  display: inline-block;
+  width: 1.15em;            /* 文字サイズに追従する小ささ（絵文字風） */
+  height: 1.15em;
+  min-width: 1.15em;
+  object-fit: contain;
+  flex-shrink: 0;
+  vertical-align: -0.12em;  /* 文字の高さの中央付近に整列 */
+  margin-right: 0.3em;
+  pointer-events: none;
+}
 
 /* パネル最下部のロゴ */
 .menu__logo {
