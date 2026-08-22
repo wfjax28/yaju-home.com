@@ -22,8 +22,10 @@
     { label: 'はじめに',      href: '#disabled',                             icon: 'picture/yajuthink.webp' },
     { label: '今日の婬夢',    href: '#disabled',                             icon: 'picture/medikara.webp' },
     { label: 'イベント',      href: '#disabled',                             icon: 'picture/yajuhappy.webp' },
-    { label: 'ホモの歴史',    href: '#disabled',                             icon: 'picture/goface.webp' },
+    { label: 'ホモの歴史',    href: '#disabled',                             icon: 'picture/inmukun.webp' },
+    { label: 'GO is ????', href:'gois.html', icon:'picture/goface.webp'},
     { label: '拓也の射精 投票円', href:'takusha.html', icon:'picture/takuyahoukou.webp'},
+
     { label: '野獣邸に参加',  href: 'https://discord.gg/yjsnpi', target: '_blank', rel: 'noopener noreferrer', icon: 'picture/favicon.webp' },
   ];
 
@@ -53,8 +55,8 @@
     '<nav class="menu" id="site-menu" aria-label="サイトナビゲーション" aria-hidden="true">' +
       '<div class="menu__inner">' +
         '<ul class="menu__list">' + itemsHtml + '</ul>' +
-        '<p class="menu__logo" aria-hidden="true">野獣邸</p>' +
       '</div>' +
+      '<p class="menu__logo" aria-hidden="true">野獣邸</p>' +
     '</nav>' +
     '<button class="menu-backdrop" type="button" tabindex="-1" aria-hidden="true"></button>';
 })();

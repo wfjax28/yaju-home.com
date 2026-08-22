@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+    <title>野獣邸.com | 非公式サイト</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta name="description" content="Discordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。">
+    <link rel="icon" href="./picture/favicon.webp" sizes="any">
+    <link rel="canonical" href="https://yaju-home.com/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Noto+Sans+JP:wght@100..900&family=Potta+One&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./yaju-home-com.css">
+    <script src="./yaju-home-menu.js" defer></script>
+    <script src="./yaju-home-com.js" defer></script>
+
+    <style>
+      .poll-app { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:center; gap:0.5rem; margin:1.5rem auto; max-width:920px; }
+      .poll-app input[type=text] { font-size:1.6rem; width:22em; text-align:center; padding:0.4rem 0.15rem; border:2px solid var(--c-primary); border-radius:0; background:var(--c-surface); color:var(--c-text); font-weight:700; }
+      .poll-app input[type=text]:disabled { opacity:0.55; }
+      .poll-app .char-counter { font-size:0.9rem; color:var(--c-text-dim); }
+      #vote-btn { display:block; margin:1.2rem auto; font-size:1.9rem; font-weight:900; letter-spacing:0.2em; padding:0.8em 3.5em; color:#fff; background:linear-gradient(135deg, var(--c-primary)); border:none; border-radius:0; cursor:pointer; transform:translateY(0px); transition: 0.2s;}
+      #vote-btn:hover:not(:disabled) {transform: translateY(-2px); transition: 0.2s;}
+      #vote-btn:disabled { opacity:0.55; cursor:not-allowed; }
+      /* ===== 【テスト用】投票リセット(本実装時は削除) ===== */
+      /* #reset-vote-btn { display:block; margin:0.8rem auto; font-size:1rem; padding:0.5em 1.6em; background:var(--c-surface); color:var(--c-text); border:2px solid var(--c-border); border-radius:0; cursor:pointer; } */
+      /* #reset-vote-btn:hover { border-color:var(--c-primary); } */
+      .result-box { max-width:760px; margin:2rem auto; text-align:center; }
+      .result-box h2 { font-size:1.9rem; font-family:var(--font-logo); }
+      .totals { font-size:1.3rem; font-weight:700; }
+      .chart-wrap { display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center; justify-content:center; }
+      #pie-chart { width:250px; height:250px; }
+      .legend { list-style:none; padding:0; text-align:left; min-width:200px; }
+      .legend li { margin:0.35rem 0; font-size:1rem; }
+      .legend-swatch { display:inline-block; width:13px; height:13px; margin-right:0.5rem; border-radius:3px; vertical-align:0; }
+    </style>
+</head>
+<body>
+        <header class="hero-header">
+            <h1 class="header-yajutei">野獣邸</h1>
+        </header>
+
+        <!-- グローバルメニューは yaju-home-menu.js で動的生成(単一ソース) -->
+        <div id="site-menu-root" data-page="takuya"></div>
+
+    <main id="content" class="main-content">
+        <section class="main">
+            <h1 style="font-size:4rem; font-family:var(--font-logo); text-align:center;">GO is ????</h1>
+            <p style="font-size:1.25rem; text-align:center;">ホモのみんなでGOの正体を考えよう(提案)<br>名前は自由に入力できるゾ(32文字以内)</p>
+
+            <!-- ===== 投票フォーム ===== -->
+            <div class="poll-app">
+                <span style="font-size:2.4rem; font-weight:900; color:var(--c-text);  font-family: 'Potta One', system-ui;">GO is</span>
+                <input type="text" id="name-input" maxlength="32" autocomplete="off" placeholder="" aria-label="名前">
+                <span class="char-counter" id="char-counter">0 / 32</span>
+            </div>
+            <button type="button" id="vote-btn"><b>投票</b></button>
+            <p style="text-align:center; font-size:0.95rem; color:var(--c-text-dim);" id="hint-msg">投票は今月限りで無制限にできるゾ(来月から1日1票)</p>
+
+            <!-- ===== 【テスト用】ここから =====
+                 投票済みフラグ(ローカル保存)のリセットボタン。
+                 ※ 本実装時は、このボタンと冒頭の #reset-vote-btn スタイル、および
+                   スクリプト末尾の「投票リセット(テスト用)」節をまとめて削除してください。
+            ===== -->
+            <!-- <button type="button" id="reset-vote-btn">投票フラグリセット(テスト用)</button> -->
+            <!-- ===== 【テスト用】ここまで ===== -->
+
+            <!-- ===== 集計結果 ===== -->
+            <div class="result-box">
+                <h2>集計結果</h2>
+                <p class="totals">全投票数: <strong id="total-votes">0</strong>票 / 投票項目数: <strong id="total-items">0</strong>件</p>
+                <div class="chart-wrap">
+                    <svg id="pie-chart" viewBox="0 0 200 200" width="250" height="250" role="img" aria-label="拓射投票分布"></svg>
+                    <ul class="legend" id="legend"></ul>
+                </div>
+                <p id="result-msg" style="text-align:center; font-weight:bold;"></p>
+                <button type="button" id="expand-all-btn" style="display:block; margin:0.8rem auto; font-size:1rem; padding:0.5em 1.6em; background:var(--c-surface); color:var(--c-text); border:2px solid var(--c-border); border-radius:0; cursor:pointer;">すべての投票項目を表示</button>
+            </div>
+        </section>
+    </main>
+
+<!-- Appwrite SDK (v14+) -->
+<script type="module">
+import { Client, Databases, ID } from "https://cdn.jsdelivr.net/npm/appwrite@14.0.1/+esm";
+
+const client = new Client()
+    .setEndpoint('https://sgp.cloud.appwrite.io/v1')
+    .setProject('6a87d78a002c8b5d12eb');
+
+const databases = new Databases(client);
+const DATABASE_ID = '6a87e02900253dd1bfc3';
+const POLL_COLLECTION_ID = 'go-is';
+//const LOCAL_VOTED_KEY = 'has_voted_amount';
+//const LOCAL_VOTED_KEY = 'has_voted_amount';   // 'once' モード用: 1人1回フラグ
+const LOCAL_NAME_KEY = 'last_voted_name'; // 直近に投票した名前(プレースホルダ表示用)
+const LOCAL_DAILY_KEY = 'last_voted_date';    // 'daily' モード用: 最終投票日(YYYY-MM-DD)
+
+// ============================================================
+// 投票制限モードの設定
+//   'unlimited' : 今は無制限(1人何票でも投票できる)
+//   'once'      : 1人あたり全部で1票
+//   'daily'     : 1人あたり1日1票
+// この値を書き換えるだけで切り替え可能(localStorageベースの簡易実装)。
+// ※ 本番の厳格な制限にはサーバー側での実装が望ましい。
+// ============================================================
+const VOTE_LIMIT_MODE = 'unlimited';
+
+// 今日の日付(YYYY-MM-DD, その端末のローカル日時)
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// 現在のモードで「1票でも投票できる」かどうか
+function isVoteAllowed() {
+  switch (VOTE_LIMIT_MODE) {
+    case 'once':
+      return !localStorage.getItem(LOCAL_VOTED_KEY);
+    case 'daily':
+      return localStorage.getItem(LOCAL_DAILY_KEY) !== todayStr();
+    case 'unlimited':
+    default:
+      return true; // 無制限: 常に許可
+  }
+}
+
+// 制限で弾かれた時のメッセージ
+function limitDeniedMessage() {
+  if (VOTE_LIMIT_MODE === 'daily') {
+    return '今日の投票はもう終わっちゃっ...たぁ！また明日頼むゾ';
+  }
+  return 'あなたは投票済みゾ。ありがとナス！';
+}
+
+// 本投票成功(非SHIFT)時のローカル記録。
+// 'once' なら1回フラグ、'daily' なら今日の日付を記録。無制限ならフラグ不要。
+function recordVote(name) {
+  if (VOTE_LIMIT_MODE === 'once') {
+    localStorage.setItem(LOCAL_VOTED_KEY, '1');
+  } else if (VOTE_LIMIT_MODE === 'daily') {
+    localStorage.setItem(LOCAL_DAILY_KEY, todayStr());
+  }
+  // 直近に投票した名前はどのモードでも保存(プレースホルダ表示に使う)
+  localStorage.setItem(LOCAL_NAME_KEY, name);
+}
+
+const nameInput = document.getElementById('name-input');
+const charCounterEl = document.getElementById('char-counter');
+const voteBtn = document.getElementById('vote-btn');
+const resultMsg = document.getElementById('result-msg');
+const totalVotesEl = document.getElementById('total-votes');
+const totalItemsEl = document.getElementById('total-items');
+const legendEl = document.getElementById('legend');
+const svgEl = document.getElementById('pie-chart');
+
+// ---- SHIFT(試験投票)検出 ----
+let shiftHeld = false;
+document.addEventListener('keydown', (e) => { if (e.key === 'Shift') shiftHeld = true; });
+document.addEventListener('keyup',   (e) => { if (e.key === 'Shift') shiftHeld = false; });
+
+// 円グラフ用パレット
+const COLORS = ['#9b6b03', '#6b3b0f', '#c94f4f', '#3a8c5a', '#2f7f9f', '#7a4fae', '#d4813e', '#4f9f8f'];
+
+// 円グラフの座標計算
+function polarAngle(r, deg) {
+  const rad = (deg - 90) * Math.PI / 180;
+  return [100 + r * Math.cos(rad), 100 + r * Math.sin(rad)];
+}
+
+function drawPie(entries) {
+  const total = entries.reduce((s, e) => s + e.votes, 0);
+  let angle = 0;
+  const paths = [];
+
+  entries.forEach((e, i) => {
+    const sweep = total > 0 ? (e.votes / total) * 360 : 0;
+    const endAngle = angle + sweep;
+    if (sweep > 0) {
+      const p1 = polarAngle(90, angle);
+      const p2 = polarAngle(90, endAngle);
+      const largeArc = sweep <= 180 ? 0 : 1;
+      paths.push(
+        '<path d="M 100 100 L ' + p1[0].toFixed(2) + ' ' + p1[1].toFixed(2) +
+        ' A 90 90 0 ' + largeArc + ' 1 ' + p2[0].toFixed(2) + ' ' + p2[1].toFixed(2) +
+        ' Z" fill="' + COLORS[i % COLORS.length] + '" stroke="#ffffff" stroke-width="1.5"></path>'
+      );
+    }
+    angle = endAngle;
+  });
+  svgEl.innerHTML = paths.join('');
+
+  legendEl.innerHTML = entries.map((e, i) => {
+    const pct = total > 0 ? ((e.votes / total) * 100).toFixed(1) : '0.0';
+    const label = e.isOther ? 'その他' : escapeHtml(e.name);
+    return '<li><span class="legend-swatch" style="background:' + COLORS[i % COLORS.length] + '"></span>' +
+      label + ': ' + e.votes + '票 (' + pct + '%)</li>';
+  }).join('') || '<li>まだ投票がありませんスギ</li>';
+}
+
+// 全投票データを取得して合計と円グラフを更新
+// expandAll = true なら「その他」にまとめず全件を展開表示
+let expandAll = false;
+
+async function renderResult() {
+  try {
+    const response = await databases.listDocuments(DATABASE_ID, POLL_COLLECTION_ID);
+    // 名前が文字列で入っているドキュメントのみを集計対象にする(旧・priceベースのデータは除外)
+    const docs = response.documents.filter(d => typeof d.name === 'string' && typeof d.votes === 'number');
+    let totalVotes = 0;
+    const entries = [];
+    docs.forEach(d => {
+      totalVotes += d.votes;
+      entries.push({ name: d.name, votes: d.votes });
+    });
+    entries.sort((a, b) => b.votes - a.votes || a.name.localeCompare(b.name));
+
+    let chartEntries;
+    if (expandAll) {
+      // 全件をそのまま展開表示
+      chartEntries = entries;
+    } else {
+      // 得票数の多い上位10件のみ円グラフに表示し、残りは「その他」として最後にまとめる
+      chartEntries = entries.slice(0, 10);
+      const rest = entries.slice(10);
+      if (rest.length > 0) {
+        chartEntries.push({
+          name: null,
+          votes: rest.reduce((sum, d) => sum + d.votes, 0),
+          isOther: true
+        });
+      }
+    }
+
+    totalVotesEl.textContent = totalVotes.toString();
+    totalItemsEl.textContent = entries.length.toString();
+    drawPie(chartEntries);
+  } catch (error) {
+    console.error('集計取得失敗:', error);
+  }
+}
+
+// HTML表示用にユーザー入力をエスケープ(XSS対策)
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// 自由文(名前)を、Appwriteで許されるドキュメントID(英数._-・最大36文字)に決定的に変換する。
+// 名前からSHA-256を算出し先頭30桁の16進数化する事で、インデックスなしでも重複判定できる。
+async function nameToDocId(name) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(name));
+  const hex = Array.from(new Uint8Array(buf))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+  return 'n_' + hex.slice(0, 30); // 'n_' + 30文字 = 33文字(36文字以下)
+}
+
+// 名前の投票を送信(重複ならvotes+1、無ければ新規作成)
+// ドキュメントIDを名前のSHA-256に固定する事で、インデックスなしでも重複判定できる
+function isSchemaError(error) {
+  const msg = String(
+    (error && error.message) || (error && error.response) || (error && error.type) || ''
+  );
+  return /unknown attribute|invalid document structure|attribute [a-z]+ does not exist/i.test(msg);
+}
+
+async function upsertVote(name) {
+  const docId = await nameToDocId(name);
+  try {
+    // 既存ドキュメントをIDで取得(無ければ404相当で throw される想定)
+    let found = false;
+    let curVotes = 0;
+    try {
+      const doc = await databases.getDocument(DATABASE_ID, POLL_COLLECTION_ID, docId);
+      found = true;
+      curVotes = doc.votes || 0;
+    } catch (err) {
+      // ドキュメント未存在なら作成へ
+    }
+
+    if (found) {
+      await databases.updateDocument(DATABASE_ID, POLL_COLLECTION_ID, docId, {
+        votes: curVotes + 1
+      });
+    } else {
+      await databases.createDocument(
+        DATABASE_ID, POLL_COLLECTION_ID, ID.custom(docId),
+        { name: name, votes: 1 }
+      );
+    }
+    return { ok: true, needsSchema: false };
+  } catch (error) {
+    console.error('投票送信失敗:', error);
+    if (isSchemaError(error)) {
+      return { ok: false, needsSchema: true };
+    }
+    return { ok: false, needsSchema: false };
+  }
+}
+
+const NAME_LENGTH_LIMIT = 32; // 文字数制限(DB側のstring属性と揃える)
+
+function charCount(s) {
+  // サロゲートペア等も1文字ずつ数える(Array.fromはコードポイント単位で分割)
+  return Array.from(s).length;
+}
+
+function updateCharCounter() {
+  const n = charCount(nameInput.value);
+  charCounterEl.textContent = n + ' / ' + NAME_LENGTH_LIMIT;
+  charCounterEl.style.color = n > NAME_LENGTH_LIMIT ? 'var(--c-primary)' : '';
+}
+
+function handleVote() {
+  const isTestVote = shiftHeld;
+
+  // 本投票(非SHIFT)だけ制限を適用する(SHIFTは試験投票なので無制限)
+  if (!isTestVote && !isVoteAllowed()) {
+    alert(limitDeniedMessage());
+    return;
+  }
+
+  const name = nameInput.value.trim();
+  if (!name) {
+    alert('名前を入力してくれよな～頼むよ～');
+    return;
+  }
+  if (charCount(name) > NAME_LENGTH_LIMIT) {
+    alert('名前は' + NAME_LENGTH_LIMIT + '文字以内で入力してくれ(DBの制限なんだよな…)');
+    return;
+  }
+
+  voteBtn.disabled = true;
+  upsertVote(name).then((res) => {
+    if (!res.ok) {
+      voteBtn.disabled = false;
+      if (res.needsSchema) {
+        alert('なんか(エラー)犯されてるよぉ(データベースに属性 name(文字列・32文字)・votes(整数) が未定義です。データベースのコンソールで作成してください。)');
+        console.error('属性未定義: go-is に name(string, 32文字), votes(integer) が必要');
+      } else {
+        alert('投票できなかったゾ！数回試して無理だったら管理者に報告よろしくナス！');
+      }
+      return;
+    }
+    if (isTestVote) {
+      voteBtn.disabled = false; // 試験投票は連続可能
+      resultMsg.textContent = '投票しました(試験投票: SHIFTのためローカル保存はされていません)';
+      alert('投票ありがとナス! (!TEST!)');
+    } else {
+      recordVote(name); // モードに応じたローカル記録(無制限なら名前のみ保存)
+      nameInput.value = '';
+      updateCharCounter();
+      nameInput.placeholder = name; // 過去に入力した名前をプレースホルダに表示
+      resultMsg.textContent = '投票ありがとナス! 集計結果を更新しました。';
+      alert('投票ありがとナス!');
+    }
+    renderResult();
+  });
+}
+
+voteBtn.addEventListener('click', handleVote);
+nameInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); handleVote(); }
+});
+nameInput.addEventListener('input', updateCharCounter);
+
+// ページ読込時: 現在モードで「投票済み/今日投票済み」ならプレースホルダに過去の名前を表示
+if (!isVoteAllowed()) {
+  const last = localStorage.getItem(LOCAL_NAME_KEY);
+  if (last) nameInput.placeholder = last;
+}
+
+// ===== 【テスト用】ここから =====
+// 投票済みフラグ(ローカル保存)のリセットボタン処理。
+// ※ 本実装時は、この節と #reset-vote-btn ボタン・#reset-vote-btn スタイルを
+//   まとめて削除してください(LOCAL_VOTED_KEY の宣言は残してOK)。
+/* const resetVoteBtn = document.getElementById('reset-vote-btn');
+if (resetVoteBtn) {
+  resetVoteBtn.addEventListener('click', () => {
+    localStorage.removeItem(LOCAL_VOTED_KEY);
+    localStorage.removeItem(LOCAL_DAILY_KEY); // 'daily' モード用の日付記録もリセット
+    localStorage.removeItem(LOCAL_NAME_KEY); // 過去の入力値も削除
+    nameInput.value = '';
+    nameInput.placeholder = ''; // プレースホルダも戻す
+    voteBtn.disabled = false;
+    resultMsg.textContent = '投票済みフラグをリセットしました(再投票できます)';
+    alert('投票済みフラグと入力値をリセットしました');
+  }); 
+} */
+// ===== 【テスト用】ここまで =====
+
+// 「すべての投票項目を表示」ボタン: 押すと全件展開でグラフを再描画し、ボタンを無効化
+const expandAllBtn = document.getElementById('expand-all-btn');
+if (expandAllBtn) {
+  expandAllBtn.addEventListener('click', () => {
+    expandAll = true;
+    expandAllBtn.disabled = true;
+    expandAllBtn.textContent = 'すべての投票項目を表示しています';
+    renderResult();
+  });
+}
+
+renderResult();
+</script>
+</body>
+</html>
