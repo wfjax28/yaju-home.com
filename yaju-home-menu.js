@@ -16,10 +16,10 @@
   const rootEl = document.getElementById('site-menu-root');
   if (!rootEl) return;
 
-  // ---- ここがメニュー項目の単一ソース ---- ※複数ページ共通
+  // ---- ここがメニュー項目の単一ソース ---- ※複数ページ共通 #disabled は無効項目ゾ！
   const MENU_SECTIONS = [
     { label: 'ホーム',        href: './index.html',                          icon: 'picture/are.webp' },
-    { label: 'はじめに',      href: '#disabled',                             icon: 'picture/yajuthink.webp' },
+    { label: 'はじめに',      href: 'about.html',                             icon: 'picture/yajuthink.webp' },
     { label: '今日の婬夢',    href: '#disabled',                             icon: 'picture/medikara.webp' },
     { label: 'イベント',      href: '#disabled',                             icon: 'picture/yajuhappy.webp' },
     { label: 'ホモの歴史',    href: '#disabled',                             icon: 'picture/inmukun.webp' },

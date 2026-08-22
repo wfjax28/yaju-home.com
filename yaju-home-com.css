@@ -170,7 +170,8 @@ body::after {
   text-align: center;
   text-shadow: 0 0 12px rgba(250, 250, 249, 0.5);
   animation: FadeUp 1s 0.15s ease both;
-
+  /* リンクの下線を消す */
+  text-decoration: none;
 }
 .google-sans {
   font-family: "Google Sans", sans-serif;
@@ -256,7 +257,7 @@ a {
   overflow: hidden;   /* 角の丸みに沿ってラインを切り取るため */
 }
 .intro__notice{
-  color: var(--c-accent);
+  color: var(--c-text);
 }
 .intro__warn{
   color: red;
