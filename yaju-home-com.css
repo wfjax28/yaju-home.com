@@ -1,204 +1,651 @@
 @charset "UTF-8";
 
+/* ============================================================
+   野獣邸.com - 非公式ファンサイト
+   Dynamic & Visual-focused theme
+   ============================================================ */
+
+/* ---------- Fonts ---------- */
 @font-face {
-  font-family: 'KouzanMouhituFont';
-  src: url(./items/KouzanMouhituFontOTF.otf);
+  font-family: 'kouzanbrushfont';
+  /* src: url('items\\kouzanbrushfontotf-subset.ttf') format('truetype'); */
+  src: url('items\\KouzanMouhituFontOTF.otf') format('opentype');
+  font-display: swap;  /*フォント読み込み中もテキストを表示*/
 }
 
-@keyframes HeaderBackgroundScroll {
-  from {
-    background-position: 0 0;
+/* ---------- Design tokens ---------- */
+@media (prefers-color-scheme: light) {
+  :root {
+    /* base */
+    --c-bg: linear-gradient(135deg, #ffffff, #f0f0f0);
+    --c-surface: rgba(255,255,255, 0.274);
+    --c-border: rgba(19, 18, 18, 0.16);
+  
+    /* accents */
+    --c-primary: #9b6b03;
+    --c-accent: #6b3b0f;
+    --c-text: #070707;
+    --c-text-dim: #070707;
+    
+    --c-menu-bg: rgba(255, 255, 255, 0.92);
+    --c-menu-bg-accent: rgba(168, 167, 167, 0.97);
+
+    --radius: 24px;
+    --shadow-lg: 0 30px 70px rgba(0, 0, 0, 0.55);
+    --glow: 0 0 26px rgba(255, 179, 71, 0.4);
+
+    /* type */
+    --font-body: "Google Sans", "Noto Sans JP", Meiryo, system-ui, sans-serif;
+    --font-logo: 'kouzanbrushfont', var(--font-body);
   }
-  to {
-    background-position: -308px 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* base */
+    --c-bg: linear-gradient(135deg, #080808, #575656);
+    --c-surface: rgba(14, 13, 13, 0.274);
+    --c-border: rgba(219, 217, 217, 0.16);
+  
+    /* accents */
+    --c-primary: #9b6b03;
+    --c-accent: #6b3b0f;
+    --c-text: #fcf8f8;
+    --c-text-dim: #e4e4e4;
+
+    --c-menu-bg: rgba(14, 13, 13, 0.92);
+    --c-menu-bg-accent: rgba(168, 167, 167, 0.97);
+
+    --radius: 24px;
+    --shadow-lg: 0 30px 70px rgba(0, 0, 0, 0.55);
+    --glow: 0 0 26px rgba(255, 179, 71, 0.4);
+    /* type */
+    --font-body: "Google Sans", "Noto Sans JP", Meiryo, system-ui, sans-serif;
+    --font-logo: 'kouzanbrushfont', var(--font-body);
   }
 }
-
-:root {
-  color-scheme: light dark;
+@keyframes Aurora {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(4%, -3%) scale(1.06); }
+  100% { transform: translate(-4%, 2%) scale(1.1); }
 }
 
-body{
-  margin: 0;
-  padding: 0;
-  height: 100%;
+@keyframes HeaderScroll {
+  from { background-position: 0 0; }
+  to   { background-position: -308px 0; }
 }
 
-header {
+@keyframes Float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+
+@keyframes FadeUp {
+  from { opacity: 0; transform: translateY(34px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes Pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.06); }
+}
+
+@keyframes Shine {
+  0%                { transform: translateX(-130%) skewX(-18deg); }
+  55%, 100%         { transform: translateX(230%) skewX(-18deg); }
+}
+
+/* ---------- Reset / base ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--c-text);
+  background: var(--c-bg);
+  line-height: 1.8;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* animated aurora background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  background:
+    radial-gradient(42% 42% at 18% 12%, rgba(255, 94, 58, 0.22), transparent 62%),
+    radial-gradient(40% 40% at 86% 20%, rgba(255, 179, 71, 0.16), transparent 60%),
+    radial-gradient(50% 50% at 60% 96%, rgba(120, 70, 180, 0.16), transparent 62%),
+    var(--c-bg);
+}
+
+/* ikisugi.gif を透明度10％で敷き詰める背景レイヤー（背景色は変更しない） */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  background-image: url('picture\\ikisugi.gif');
+  background-repeat: repeat; /* 詰め込めるだけ敷き詰める */
+  background-size: auto;      /* GIF の元サイズ(270x200)を維持して隙間なく敷き詰める */
+  opacity: 0.10;              /* 透明度10％ */
+  pointer-events: none;
+}
+
+.main-content {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 9vw, 6.5rem) 5%;
+}
+
+.hero-header {
   width: 100%;
-  height: 20vh;
+  height: 300px; /* 表示させたいヘッダーの高さを指定 */
+  overflow: hidden; /* はみ出た画像を非表示にする */
+  position: relative;
+  
+  /* 背景画像の設定 */
+  background-image: url('picture\\yajutei-on-header.webp'); /* 画像のパス */
+  background-size: 100%; /* 100%以上に設定して画像をズームする */
+  background-position: center; /* ズームの中心位置（例: 中央） */
+  background-repeat: no-repeat;
+  
+  /* 文字を上下中央に配置したい場合（必要に応じて） */
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-header::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("./picture/yajutei-on-header.png");
-  background-repeat: repeat-x;
-  background-size: auto 100%;
-  animation: HeaderBackgroundScroll 20s linear infinite;
-  opacity: 0.7;
-  z-index: 0;
-}
-
-header > * {
-  position: relative;
-  z-index: 1;
 }
 
 .header-yajutei{
-  font-family: 'KouzanMouhituFont';
-  font-size: 72px;
+  font-family: var(--font-logo);
+  font-size: clamp(4rem, 18vw, 9rem);
+  line-height: 1.05;
+  letter-spacing: 0.08em;
+  color: #000000;
+  /* 真ん中に寄せる */
+  text-align: center;
+  text-shadow: 0 0 12px rgba(250, 250, 249, 0.5);
+  animation: FadeUp 1s 0.15s ease both;
+  /* リンクの下線を消す */
+  text-decoration: none;
+}
+.google-sans {
+  font-family: "Google Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 514;
+  font-style: normal;
+  font-variation-settings:
+    "GRAD" 0;
 }
 
-.sidebar_system-menu-button {
+.noto-sans-jp {
+  font-family: "Noto Sans JP", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.potta-one-regular {
+  font-family: "Potta One", system-ui;
+  font-weight: 200;
+  font-style: normal;
+}
+a {
+  color: var(--c-primary);
+}
+
+/* 外枠：テキストと画像を横並びにする Flex コンテナ */
+.main-header-quote-wrapper {
+  display: flex;
+  align-items: center; /* 上下中央揃え */
+  justify-content: space-between;
+  gap: 1.5rem; /* テキストと画像の間の余白 */
+  background-color: var(--c-menu-bg); /* 引用背景（ライト/ダーク対応） */
+  padding: 1.5rem 2rem;
+/*  border-left: 5px solid var(--c-primary, #666); /* 引用風の左アクセント線 */
+  border-radius: 8px; /* 角丸 */
+  margin: 2rem 0;
+}
+
+/* 引用テキスト部分 */
+.main-header-title {
+  font-family: "Potta One", system-ui;
+  font-size: clamp(1.25rem, 4.5vw, 2.2rem); /* 引用文向けにサイズを少し調整 */
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  color: var(--c-text);
+  text-align: left; /* 引用風にするため左寄せに変更 */
+  margin: 0;
+  position: relative;
+  flex: 1; /* 空きスペースを埋める */
+}
+
+/* 右側の画像 */
+.main-header-quote-img {
+  width: 120px; /* 画像の横幅 */
+  height: 120px; /* 画像の高さ */
+  object-fit: cover; /* アスペクト比を維持してトリミング */
+  border-radius: 8px; /* 必要に応じて丸くする (50% にすると円形) */
+  flex-shrink: 0; /* 画面が狭くなっても画像が潰れないように設定 */
+}
+
+/* スマホ対応（画面幅が狭い場合は縦並びにする） */
+@media (max-width: 600px) {
+  .main-header-quote-wrapper {
+    flex-direction: column-reverse; /* 画像を上、または下に折り返す */
+    align-items: flex-start;
+  }
+  
+  .main-header-quote-img {
+    width: 80px;
+    height: 80px;
+  }
+}
+.intro__notice,.intro__warn {
+  margin-top: 1.8em;
+  padding: 1.1em 1.4em;
+  font-size: 0.86rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  /* border-leftを削除し、疑似要素でラインを表現 */
+  border-radius: 14px;
+  text-align: left;
+  position: relative; /* 疑似要素の位置指定のため */
+  overflow: hidden;   /* 角の丸みに沿ってラインを切り取るため */
+}
+.intro__notice{
+  color: var(--c-text);
+}
+.intro__warn{
+  color: red;
+}
+
+/* 参考画像のようなピンクのラインを追加 */
+.intro__notice::after,.intro__warn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px; /* ラインの太さ（参考画像に合わせて太めに設定） */
+  height: 100%;
+  background-color: var(--c-accent); /* 参考画像のピンク色 */
+}
+
+/* paddingを調整して、テキストがラインと重ならないようにする */
+.intro__notice,.intro__warn {
+  padding-left: calc(1.4em + 6px); /* 元のpadding + ラインの太さ */
+}
+
+
+/* タイトル部分のスタイル */
+.intro__warn::before {
+  content: '⚠️南佳也には全く似ていません⚠️';
+  display: block;
+  font-weight: 700;
+  color: red;
+  margin-bottom: 0.4em;
+  letter-spacing: 0.05em;
+}
+.intro__notice::before {
+  content: 'お知らせ';
+  display: block;
+  font-weight: 700;
+  color: var(--c-accent);
+  margin-bottom: 0.4em;
+  letter-spacing: 0.05em;
+}
+/* ---------- メニューボタン（左上固定） ---------- */
+.menu-btn {
   position: fixed;
-  top: 15px;
-  left: 15px;
-  z-index: 1001;
-  font-size: 28px;
+  top: 30px;
+  left: 30px;
+  z-index: 100; /* 他の要素より前面に表示 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 55px;
+  height: 55px;
+  padding: 10px;
+  background: var(--c-surface, rgba(180, 180, 180, 0.8));
+  border: 1px solid var(--c-border, rgba(255, 179, 71, 0.3));
+  border-radius: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.menu-btn:hover {
+  border-color: var(--c-primary, #ffb347);
+  transform: scale(1.05);
+}
+
+/* ボタン内の3本線 */
+.menu-btn__bar {
+  width: 100%;
+  height: 2px;
+  background-color: var(--c-text, #f6efe4);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* メニューが開いた時の「×」変形 */
+.menu-btn.is-active .menu-btn__bar:nth-child(1) {
+  transform: translateY(11px) rotate(45deg);
+}
+
+.menu-btn.is-active .menu-btn__bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-btn.is-active .menu-btn__bar:nth-child(3) {
+  transform: translateY(-11px) rotate(-45deg);
+}
+
+/* ============================================================
+   Navigation menu (drawer panel)
+   ============================================================ */
+/* 背後ページをぼかすオーバーレイ（フェードインでブラーを適用） */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(11, 10, 14, 0.42);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease;
+}
+
+.menu-backdrop.is-active {
+  opacity: 1;
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* ナビゲーションパネル本体（画面の約1/3幅まで展開） */
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 95; /* コンテンツより前面、ただし開閉ボタン(100)よりは背面 */
+  width: min(34vw, 28rem);
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(4.5rem, 12vh, 6.5rem) clamp(1.6rem, 4vw, 2.6rem) clamp(1.6rem, 4vw, 2.4rem);
+  background: linear-gradient(165deg, var(--c-menu-bg), var(--c-menu-bg-accent));
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-right: 1px solid var(--c-border);
+  /*box-shadow: 24px 0 60px rgba(243, 38, 38, 0.5); */
+  transform: translateX(-105%);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menu::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--c-primary), var(--c-accent));
+  opacity: 0.55;
+}
+
+.menu.is-open { transform: translateX(0); }
+
+.menu__inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;         /* 残り高さいっぱいのスクロール領域に */
+  min-height: 0;          /* flex子の縮小を許可して overflow-y を機能させる */
+  overflow-y: auto;         /* 項目が多い時にパネル内で縦スクロールできるようにする */
+  overscroll-behavior: contain; /* スクロールが背後のページに伝達しないようにする */
+  /* スクロールバーを目立たせすぎないように薄く */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(128, 128, 128, 0.5) transparent;
+}
+
+.menu__inner::-webkit-scrollbar { width: 8px; }
+.menu__inner::-webkit-scrollbar-track { background: transparent; }
+.menu__inner::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.5);
+  border-radius: 4px;
+}
+
+.menu__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: auto;   /* リストを上部に残る空間の中央へ */
+  margin-bottom: auto; /* ロゴは最下部に固定 */
+}
+
+.menu__link {
+  position: relative;
+  display: block;
+  padding: 0.5em 0.4em;
+  font-size: clamp(1.25rem, 4.5vw, 2.0rem);
+  letter-spacing: 0.08em;
+  color: var(--c-text);
+  text-decoration: none;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.menu__link::after {
+  content: "";
+  position: absolute;
+  left: 0.4em;
+  bottom: 0.35em;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--c-primary), var(--c-accent));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.menu__link:hover {
+  color: var(--c-primary);
+  /*transform: translateX(6px);*/
+}
+
+.menu__link:hover::after { width: 2.2em; }
+
+/* 未実装ページ（準備中）は操作不可にしてグレー表示 */
+.menu__link[aria-disabled="true"] {
+  color: var(--c-text-dim);
+  cursor: default;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.menu__link[aria-disabled="true"]::after { display: none; }
+
+/* メニュー文字列の前に置く絵文字風の小さなアイコン画像（試験中は medikara.webp を全項目で使用） */
+.menu__link .menu__icon {
+  display: inline-block;
+  width: 1.15em;            /* 文字サイズに追従する小ささ（絵文字風） */
+  height: 1.15em;
+  min-width: 1.15em;
+  object-fit: contain;
+  flex-shrink: 0;
+  vertical-align: -0.12em;  /* 文字の高さの中央付近に整列 */
+  margin-right: 0.3em;
+  pointer-events: none;
+}
+
+/* パネル最下部のロゴ（スクロール領域の外に置き、下に固定） */
+.menu__logo {
+  flex-shrink: 0;          /* 狭くても潰さない */
+  margin-top: auto;        /* パネル最下部へ固定 */
+  flex: 0 0 auto;
+  padding-top: clamp(1.4rem, 5vh, 2.2rem);
+  font-family: var(--font-logo);
+  font-size: clamp(1.7rem, 5vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+  text-align: center;
+  color: var(--c-text);
+}
+
+/* ---------- メニュー表示中：背後を静止画として固定（スクロールロック） ---------- */
+body.menu-open {
+  overflow: hidden; /* スクロールロック */
+}
+
+/* 小さい画面では1/3幅だと狭すぎるため広めに確保 */
+@media (max-width: 720px) {
+  .menu {
+    width: min(80vw, 20rem);
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+}
+
+.site-footer {
+  position: relative;
+  width: 100%;
+  padding: clamp(3rem, 8vw, 5rem) 5%;
+  text-align: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+.site-footer__title {
+  font-family: var(--font-logo);
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  letter-spacing: 0.08em;
+  color: var(--c-primary);
+}
+.takuya{
   background: none;
   border: none;
   cursor: pointer;
-  color: #333;
 }
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.3s;
-  z-index: 999;
+/* ============================================================
+   Cards
+   ============================================================ */
+.cards {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(1.4rem, 4vw, 2.4rem);
 }
 
-.overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* サイドバー */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -260px;
-  width: 260px;
-  height: 100vh;
-  background: #222;
-  color: #fff;
-  transition: left 0.3s ease;
-  z-index: 1000;
-  padding-top: 60px;
-}
-
-.sidebar.active {
-  left: 0;
-}
-
-.sidebar ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.sidebar a {
-  display: block;
-  padding: 15px 25px;
-  color: white;
-  text-decoration: none;
-}
-
-.sidebar a:hover {
-  background: #444;
-}
-
-.main-header{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin: clamp(42px, 8%, 96px) 10%;
-}
-
-.main-header-welcome{
-  display: block;
-  font-size: clamp(20px, 0.94rem + 1.33vw, 32px);
-  margin: 5% 0%;
-}
-
-.main-header-first{
-  display: block;
-  font-size: clamp(14px, 0.67rem + 0.88vw, 22px);
-}
-
-.main-header-warn{
-  display: block;
-  font-size: clamp(14px, 1.106rem + 0.727vw, 26px);
-  margin: 5% 0%;
-}
-
-.main-notice{
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding: 0.5em 1em;
-  margin: 5% 18vw;
-  font-weight: bold;
-  border: solid 3px yellow;/*線*/
-  border-radius: 10px;/*角の丸み*/
-}
-
-.main-notice h2{
-  font-size: clamp(24px, 1.19rem + 1.33vw, 36px);
-}
-
-.main-notice p {
-  margin: 2vh; 
-  font-size: clamp(0.875rem, 0.67rem + 0.88vw, 1.375rem);
-}
-
-.main-for_newuser h1 {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  margin: 5%;
-}
-
-footer{
-  width: 100%;
-  height: 20vh;
-  display: flex;
+.card {
   position: relative;
   overflow: hidden;
+  padding: 2.4rem 2rem 2.8rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 0 /*var(--radius)*/;
+  /*backdrop-filter: blur(12px); */
+  /*box-shadow: var(--shadow-lg); */
+  text-align: center;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
-footer::before{
+/* リンクタグの下線や文字色の変更を無効化 */
+.card-link-ikisugi {
+  text-decoration: none;
+  color: inherit;
+  display: block; /* カード全体にクリック領域を広げる */
+}
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block; /* カード全体にクリック領域を広げる */
+}
+
+.card::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background-image: url(./picture/are.webp);
-  background-size: 100% 100%;
-  background-color: black;
-  opacity: 0.5;
-  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  transform: translateX(-130%) skewX(-18deg);
+  pointer-events: none;
 }
 
-footer > * {
-  position: relative;
-  z-index: 1;
+.card:hover {
+  /*transform: translateY(-10px); */
+  border-color: rgba(255, 179, 71, 0.55);
+  /*box-shadow: var(--shadow-lg), var(--glow); */
 }
 
-.f-h1{
-  text-align: left;
-  margin-top: 18px;
-  margin-left: 18px;
-  font-family: 'KouzanMouhituFont';
-  font-size: 22px;
+.card:hover .card__glow {
+  opacity: 0.95;
+  transform: translate(8%, 6%);
+}
+
+.card:hover::after {
+  animation: Shine 0.9s ease;
+}
+
+.card__icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 1.1rem;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  color: #1a1208;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+  border-radius: 50%;
+  /*box-shadow: var(--glow);*/
+  /* animation: Float 4s ease-in-out infinite; */
+}
+/* その中の画像の設定 */
+.card__icon img {
+  /* 親要素（.card__icon）の幅・高さに合わせる */
+  width: 75%;
+  height: 75%;
+  /* 縦横比を保ったまま、枠内に収める（はみ出さない） */
+  object-fit: contain;
+}
+
+
+.card__title {
+  font-family: var(--font-logo);
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  letter-spacing: 0.06em;
+  color: var(--c-text);
+}
+
+.card__text {
+  margin-top: 0.8rem;
+  color: var(--c-text-dim);
+  font-size: 0.95rem;
+}
+
+.card__badge {
+  display: inline-block;
+  margin-top: 1.6rem;
+  padding: 0.35em 1.3em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--c-primary);
+  border: 1px solid var(--c-primary);
+  border-radius: 999px;
+  /*animation: Pulse 2.6s ease-in-out infinite;*/
 }
