@@ -649,27 +649,3 @@ body.menu-open {
   border-radius: 999px;
   /*animation: Pulse 2.6s ease-in-out infinite;*/
 }
-
-footer{
-  width: 100%;
-  height: 20vh;
-  display: flex;
-  position: relative;
-  overflow: hidden;
-}
-
-footer::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url(./picture/are.webp);
-  background-size: 100% 100%;
-  background-color: black;
-  opacity: 0.5;
-  z-index: 0;
-}
-
-footer > * {
-  position: relative;
-  z-index: 1;
-}
