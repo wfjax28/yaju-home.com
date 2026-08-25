@@ -657,3 +657,197 @@ body.menu-open {
   border-radius: 999px;
   /*animation: Pulse 2.6s ease-in-out infinite;*/
 }
+
+/* ============================================================
+   History timeline（welcome/history.html）
+   ============================================================ */
+
+/* ---------- 見出し・リード文 ---------- */
+.tl-heading {
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  letter-spacing: 0.04em;
+  color: var(--c-text);
+}
+
+.tl-lead {
+  margin-top: 0.6rem;
+  color: var(--c-text-dim);
+  font-size: 0.95rem;
+}
+
+/* ---------- 年代フィルタ ---------- */
+.tl-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.tl-filter__btn {
+  padding: 0.45em 1.4em;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--c-text-dim);
+  background: transparent;
+  border: 1px solid var(--c-border);
+  border-radius: 999px; /* フラットなピル型ボタン */
+  cursor: pointer;
+  transition:
+    color 0.3s cubic-bezier(0.25, 0.8, 0.3, 1),
+    border-color 0.3s cubic-bezier(0.25, 0.8, 0.3, 1),
+    background-color 0.3s cubic-bezier(0.25, 0.8, 0.3, 1);
+}
+
+.tl-filter__btn:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+
+.tl-filter__btn[aria-pressed="true"] {
+  color: #fff;
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+}
+
+/* ---------- タイムライン全体 ---------- */
+.timeline-wrap {
+  position: relative;
+  max-width: 900px;
+  margin: 3.5rem auto 0;
+}
+
+/* 中央ライン（土台：単色でグラデーションなし） */
+.tl-line,
+.tl-progress {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+}
+.tl-line { background: var(--c-border); }
+/* 進捗ライン：バネっと伸びる（scaleY トランジション） */
+.tl-progress {
+  bottom: auto;
+  height: 100%;
+  background: var(--c-primary);
+  transform-origin: top center;
+  /*transition: transform 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* バネオーバーシューズ */
+}
+
+/* ---------- 各項目 ---------- */
+.timeline {
+  list-style: none;
+  padding: 0;
+}
+
+.tl-item {
+  position: relative;
+  width: 50%;
+  padding: 0 2.6rem 3rem 0; /* 左右交互レイアウト */
+}
+
+.tl-item--right {
+  margin-left: 50%;
+  padding: 0 0 3rem 2.6rem;
+}
+
+/* スクロールで見えたら表示（JS が .is-visible を付与） */
+.tl-item {
+  opacity: 0;
+      transform: translateY(24px) scale(0.94);
+  transition:
+    opacity 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) 0.05s,
+    transform 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.tl-item.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* 年代ドット（フラットな円。グローは使わない） */
+.tl-item__dot {
+  position: absolute;
+  top: 0.4rem;
+  right: -9px; /* 中央ライン上に配置 */
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  background: var(--c-surface);
+  border: 2px solid var(--c-border);
+  border-radius: 50%;
+  transition:
+    background-color 0.45s ease,
+    border-color 0.45s ease;
+}
+.tl-item--right .tl-item__dot { right: auto; left: -9px; }
+
+.tl-item.is-visible .tl-item__dot {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+}
+
+/* ---------- カード ---------- */
+.tl-card {
+  padding: 1.5rem 1.7rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 12px; /* 控えめな角丸。Material 風のフラットカード */
+  transition:
+    border-color 0.35s ease,
+    transform 0.35s ease;
+}
+
+.tl-card:hover {
+  border-color: rgba(155, 107, 3, 0.55);
+}
+
+.tl-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--c-primary);
+}
+
+.tl-card__tag {
+  padding: 0.15em 0.9em;
+  font-size: 0.68rem;
+  color: var(--c-text-dim);
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+}
+
+.tl-card__title {
+  margin-top: 0.55rem;
+  font-size: 1.12rem;
+  color: var(--c-text);
+}
+
+.tl-card__text {
+  margin-top: 0.5rem;
+  font-size: 0.92rem;
+  line-height: 1.9;
+  color: var(--c-text-dim);
+}
+
+/* ---------- モバイル：ラインを左寄せに切り替え ---------- */
+@media (max-width: 640px) {
+  .timeline-wrap { margin-left: 0.4rem; }
+  .tl-line, .tl-progress { left: 8px; }
+
+  .tl-item,
+  .tl-item--right {
+    width: 100%;
+    margin-left: 0;
+    padding: 0 0 2.4rem 2.2rem;
+  }
+  .tl-item__dot,
+  .tl-item--right .tl-item__dot {
+    right: auto;
+    left: 1px;
+  }
+}
