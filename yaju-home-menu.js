@@ -18,15 +18,15 @@
 
   // ---- ここがメニュー項目の単一ソース ---- ※複数ページ共通 #disabled は無効項目ゾ！
   const MENU_SECTIONS = [
-    { label: 'ホーム',        href: './index.html',                          icon: 'picture/are.webp' },
-    { label: 'はじめに',      href: 'about.html',                             icon: 'picture/yajuthink.webp' },
-    { label: '今日の婬夢',    href: '#disabled',                             icon: 'picture/medikara.webp' },
-    { label: 'イベント',      href: '#disabled',                             icon: 'picture/yajuhappy.webp' },
-    { label: 'ホモの歴史',    href: '#disabled',                             icon: 'picture/inmukun.webp' },
-    { label: 'GO is ????', href:'gois.html', icon:'picture/goface.webp'},
-    { label: '拓也の射精 投票円', href:'takusha.html', icon:'picture/takuyahoukou.webp'},
+    { label: 'ホーム',        href: '/index.html',                          icon: '/picture/are.webp' },
+    { label: 'はじめに',      href: '/welcome/about.html',                             icon: '/picture/yajuthink.webp' },
+    { label: '今日の婬夢',    href: '/todays/todays.html',                             icon: '/picture/medikara.webp' },
+    { label: 'イベント',      href: '/welcome/events.html',                             icon: '/picture/yajuhappy.webp' },
+    { label: 'ホモの歴史',    href: '/welcome/history.html',                             icon: '/picture/inmukun.webp' },
+    { label: 'GO is ????', href:'/votes/gois.html', icon:'/picture/goface.webp'},
+    { label: '拓射投票', href:'/votes/takusha.html', icon:'/picture/takuyahoukou.webp'},
 
-    { label: '野獣邸に参加',  href: 'https://discord.gg/yjsnpi', target: '_blank', rel: 'noopener noreferrer', icon: 'picture/favicon.webp' },
+    { label: '野獣邸に参加',  href: 'https://discord.gg/yjsnpi', target: '_blank', rel: 'noopener noreferrer', icon: '/picture/favicon.webp' },
   ];
 
   // 項目のHTML組み立て（href='#disabled' は無効項目として描画）

@@ -47,39 +47,54 @@
                 <p class="intro__notice">2026/8/10: yaju-home.com 取得 & ベータ版公開</p>
             </div>
             
-            <dev class="main-date">
+            <div class="main-date">
                 <p>今の時間は...</p>
-                <dev class="main-date-clock" id="clock"></dev>
-            </dev>
+                <div class="main-date-clock" id="clock"></div>
+            </div>
         <!-- コンテンツカード -->
         <section class="cards">
-            <a href="javascript:void(0)" class="card-link-ikisugi">
-            <article class="card card--video reveal">
-                <div class="card__icon" aria-hidden="true"><img src="picture/medikara.webp" alt="目力先輩"></div>
-                <h2 class="card__title">今日の婬夢</h2>
-                <p class="card__text">スギィ！！！！！！！！</p>
-                <span class="card__badge">間もなくイキソ</span>
-            </article>
-            </a>
-
-            <a href="about.html" class="card-link">
-            <article class="card card--quiz reveal">
+            <a href="/welcome/about.html" class="card-link">
+            <article class="card reveal">
                 <div class="card__icon" aria-hidden="true"><img src="picture/yajuthink.webp" alt="考える先輩"></div>
                 <h2 class="card__title">はじめに</h2>
                 <p class="card__text">野獣邸サーバーの基礎情報を突うずるっこむ</p>
-                <span class="card__badge">間もなくイキソ</span>
+                <span class="card__badge">クリックしてイク</span>
             </article>
             </a>
-            <a href="takusha.html" class="card-link">
-            <article class="card card--quiz reveal">
+            <a href="/todays/todays.html" class="card-link-ikisugi">
+            <article class="card reveal">
+                <div class="card__icon" aria-hidden="true"><img src="picture/medikara.webp" alt="目力先輩"></div>
+                <h2 class="card__title">今日の婬夢</h2>
+                <p class="card__text">スギィ！！！！！！！！</p>
+                <span class="card__badge">クリックしてイク</span>
+            </article>
+            </a>
+            <a href="/welcome/events.html" class="card-link">
+            <article class="card reveal">
+                <div class="card__icon" aria-hidden="true"><img src="picture/yajuhappy.webp" alt="笑顔の先輩"></div>
+                <h2 class="card__title">イベント</h2>
+                <p class="card__text">ビール!ビール!</p>
+                <span class="card__badge">クリックしてイク</span>
+            </article>
+            </a>
+            <a href="/welcome/history.html" class="card-link">
+            <article class="card reveal">
+                <div class="card__icon" aria-hidden="true"><img src="picture/inmukun.webp" alt="婬夢くん"></div>
+                <h2 class="card__title">ホモの歴史</h2>
+                <p class="card__text">野獣邸サーバーの歴史を振り返るんだよ90度</p>
+                <span class="card__badge">クリックしてイク</span>
+            </article>
+            </a>
+            <a href="/votes/takusha.html" class="card-link">
+            <article class="card reveal">
                 <div class="card__icon" aria-hidden="true"><img src="picture/takuyahoukou.webp" alt="哀叫拓也"></div>
                 <h2 class="card__title">拓也の射精額アンケート</h2>
                 <p class="card__text">3000円じゃないかもしれない(適当)</p>
                 <span class="card__badge">クリックしてイク</span>
             </article>
             </a>
-            <a href="gois.html" class="card-link">
-            <article class="card card--quiz reveal">
+            <a href="/votes/gois.html" class="card-link">
+            <article class="card reveal">
                 <div class="card__icon" aria-hidden="true"><img src="picture/goface.webp" alt="GOの御顔"></div>
                 <h2 class="card__title">GO is ????</h2>
                 <p class="card__text">GOは何者か決着をつけよう(提案)</p>
@@ -88,161 +103,161 @@
             </a>
         </section>
         </section>
+</main>
 
-    <footer class="site-footer">
-        <h2 class="site-footer__title">野獣邸 | 野獣先輩Tag</h2>
-        <!--<p class="site-footer__copyright">© 野獣邸.com 非公式</p>-->
-            <p>拓也の射精 <span id="count">0</span>円</p>
-            <button class="takuya" id="btn"><img src="picture/takuyahoukou.webp" alt="拓也「ｱｰｲｸ!」"></button>
+<footer class="site-footer">
+        <p>拓也の射精 <span id="count">0</span>円</p>
+        <button class="takuya" id="btn"><img src="picture/takuyahoukou.webp" alt="拓也「ｱｰｲｸ!」"></button>
+    <h2 class="site-footer__title">野獣邸 | 野獣先輩Tag</h2>
+
 
 
 <!-- Appwrite SDK (v14+) -->
-            <script type="module">
-                import { Client, Databases, Query } from "https://cdn.jsdelivr.net/npm/appwrite@14.0.1/+esm";
+        <script type="module">
+            import { Client, Databases, Query } from "https://cdn.jsdelivr.net/npm/appwrite@14.0.1/+esm";
 
-                const client = new Client()
-                    .setEndpoint('https://sgp.cloud.appwrite.io/v1')
-                    .setProject('6a87d78a002c8b5d12eb'); // ★ ご自身の Project ID に変更
+            const client = new Client()
+                .setEndpoint('https://sgp.cloud.appwrite.io/v1')
+                .setProject('6a87d78a002c8b5d12eb'); // ★ ご自身の Project ID に変更
 
-                const databases = new Databases(client);
+            const databases = new Databases(client);
 
-                const DATABASE_ID = '6a87e02900253dd1bfc3';
-                const COLLECTION_ID = 'takuya-button';
-                const DOCUMENT_ID = 'main_count';
+            const DATABASE_ID = '6a87e02900253dd1bfc3';
+            const COLLECTION_ID = 'takuya-button';
+            const DOCUMENT_ID = 'main_count';
 
-                const countEl = document.getElementById('count');
-                const btnEl = document.querySelector('.takuya');
+            const countEl = document.getElementById('count');
+            const btnEl = document.querySelector('.takuya');
 
-                let localPendingAdd = 0;   // 1秒間に溜まった加算額
+            let localPendingAdd = 0;   // 1秒間に溜まった加算額
+            
+            // --- カウント＆アニメーション制御変数 ---
+            let startDisplayValue = 0;
+            let targetDisplayValue = 0;
+            let currentDisplayValue = 0;
+            let animationStartTime = null;
+            let animationFrameId = null;
+            const ANIMATION_DURATION = 500; // 500ms（他人の更新反映時などのアニメーション時間）
+
+            function easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3);
+            }
+
+            // 他人からの更新などを受信した際の時間ベースアニメーション
+            function animateCount(timestamp) {
+                if (!animationStartTime) animationStartTime = timestamp;
                 
-                // --- カウント＆アニメーション制御変数 ---
-                let startDisplayValue = 0;
-                let targetDisplayValue = 0;
-                let currentDisplayValue = 0;
-                let animationStartTime = null;
-                let animationFrameId = null;
-                const ANIMATION_DURATION = 500; // 500ms（他人の更新反映時などのアニメーション時間）
+                const progress = Math.min((timestamp - animationStartTime) / ANIMATION_DURATION, 1);
+                const easedProgress = easeOutCubic(progress);
 
-                function easeOutCubic(t) {
-                    return 1 - Math.pow(1 - t, 3);
-                }
-
-                // 他人からの更新などを受信した際の時間ベースアニメーション
-                function animateCount(timestamp) {
-                    if (!animationStartTime) animationStartTime = timestamp;
-                    
-                    const progress = Math.min((timestamp - animationStartTime) / ANIMATION_DURATION, 1);
-                    const easedProgress = easeOutCubic(progress);
-
-                    currentDisplayValue = Math.floor(
-                        startDisplayValue + (targetDisplayValue - startDisplayValue) * easedProgress
-                    );
-
-                    countEl.textContent = currentDisplayValue.toLocaleString();
-
-                    if (progress < 1) {
-                        animationFrameId = requestAnimationFrame(animateCount);
-                    } else {
-                        currentDisplayValue = targetDisplayValue;
-                        countEl.textContent = currentDisplayValue.toLocaleString();
-                        animationStartTime = null;
-                        cancelAnimationFrame(animationFrameId);
-                    }
-                }
-
-                // 通常の目標値設定（アニメーションあり）
-                function setTargetValue(newValue) {
-                    startDisplayValue = currentDisplayValue;
-                    targetDisplayValue = newValue;
-                    
-                    animationStartTime = null;
-                    cancelAnimationFrame(animationFrameId);
-                    animationFrameId = requestAnimationFrame(animateCount);
-                }
-
-                // 2. 初期値取得
-                async function fetchInitialCount() {
-                    try {
-                        const doc = await databases.getDocument(
-                            DATABASE_ID,
-                            COLLECTION_ID,
-                            DOCUMENT_ID,
-                            [Query.select(['count'])]
-                        );
-                        const serverCount = doc.count || 0;
-                        startDisplayValue = serverCount;
-                        currentDisplayValue = serverCount;
-                        targetDisplayValue = serverCount;
-                        countEl.textContent = serverCount.toLocaleString();
-                    } catch (error) {
-                        console.error('初期取得失敗:', error);
-                    }
-                }
-
-                // 3. リアルタイム受信 (Realtime API)
-                client.subscribe(
-                    `databases.${DATABASE_ID}.collections.${COLLECTION_ID}.documents.${DOCUMENT_ID}`,
-                    (response) => {
-                        if (response.payload && response.payload.count !== undefined) {
-                            // 自分の未送信分も含めた値を目標値に設定して滑らかに追従
-                            setTargetValue(response.payload.count + localPendingAdd);
-                        }
-                    }
+                currentDisplayValue = Math.floor(
+                    startDisplayValue + (targetDisplayValue - startDisplayValue) * easedProgress
                 );
 
-                // 4. 連打の1秒まとめ送信
-                async function flushPendingClicks() {
-                    if (localPendingAdd === 0) return;
+                countEl.textContent = currentDisplayValue.toLocaleString();
 
-                    const addAmount = localPendingAdd;
-                    localPendingAdd = 0;
+                if (progress < 1) {
+                    animationFrameId = requestAnimationFrame(animateCount);
+                } else {
+                    currentDisplayValue = targetDisplayValue;
+                    countEl.textContent = currentDisplayValue.toLocaleString();
+                    animationStartTime = null;
+                    cancelAnimationFrame(animationFrameId);
+                }
+            }
 
-                    try {
-                        const currentDoc = await databases.getDocument(
-                            DATABASE_ID,
-                            COLLECTION_ID,
-                            DOCUMENT_ID,
-                            [Query.select(['count'])]
-                        );
-                        const newCount = (currentDoc.count || 0) + addAmount;
+            // 通常の目標値設定（アニメーションあり）
+            function setTargetValue(newValue) {
+                startDisplayValue = currentDisplayValue;
+                targetDisplayValue = newValue;
+                
+                animationStartTime = null;
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = requestAnimationFrame(animateCount);
+            }
 
-                        await databases.updateDocument(DATABASE_ID, COLLECTION_ID, DOCUMENT_ID, {
-                            count: newCount
-                        });
-                    } catch (error) {
-                        console.error('送信失敗:', error);
-                        localPendingAdd += addAmount; // 失敗時は戻す
+            // 2. 初期値取得
+            async function fetchInitialCount() {
+                try {
+                    const doc = await databases.getDocument(
+                        DATABASE_ID,
+                        COLLECTION_ID,
+                        DOCUMENT_ID,
+                        [Query.select(['count'])]
+                    );
+                    const serverCount = doc.count || 0;
+                    startDisplayValue = serverCount;
+                    currentDisplayValue = serverCount;
+                    targetDisplayValue = serverCount;
+                    countEl.textContent = serverCount.toLocaleString();
+                } catch (error) {
+                    console.error('初期取得失敗:', error);
+                }
+            }
+
+            // 3. リアルタイム受信 (Realtime API)
+            client.subscribe(
+                `databases.${DATABASE_ID}.collections.${COLLECTION_ID}.documents.${DOCUMENT_ID}`,
+                (response) => {
+                    if (response.payload && response.payload.count !== undefined) {
+                        // 自分の未送信分も含めた値を目標値に設定して滑らかに追従
+                        setTargetValue(response.payload.count + localPendingAdd);
                     }
                 }
+            );
 
-                // ★ ボタンクリック時：アニメーションを即時キャンセルして画面を直接加算描画
-                btnEl.addEventListener('click', () => {
-                    cancelAnimationFrame(animationFrameId); // 実行中のアニメーションを即停止
-                    animationStartTime = null;
+            // 4. 連打の1秒まとめ送信
+            async function flushPendingClicks() {
+                if (localPendingAdd === 0) return;
 
-                    localPendingAdd += 1;
-                    currentDisplayValue += 1;
-                    targetDisplayValue = currentDisplayValue;
+                const addAmount = localPendingAdd;
+                localPendingAdd = 0;
 
-                    // 遅延ゼロで即描画！
-                    countEl.textContent = currentDisplayValue.toLocaleString();
-                });
+                try {
+                    const currentDoc = await databases.getDocument(
+                        DATABASE_ID,
+                        COLLECTION_ID,
+                        DOCUMENT_ID,
+                        [Query.select(['count'])]
+                    );
+                    const newCount = (currentDoc.count || 0) + addAmount;
 
-                // 実行開始
-                fetchInitialCount();
+                    await databases.updateDocument(DATABASE_ID, COLLECTION_ID, DOCUMENT_ID, {
+                        count: newCount
+                    });
+                } catch (error) {
+                    console.error('送信失敗:', error);
+                    localPendingAdd += addAmount; // 失敗時は戻す
+                }
+            }
 
-                // 1秒ごとに連打分をまとめて送信
-                setInterval(flushPendingClicks, 1000);
+            // ★ ボタンクリック時：アニメーションを即時キャンセルして画面を直接加算描画
+            btnEl.addEventListener('click', () => {
+                cancelAnimationFrame(animationFrameId); // 実行中のアニメーションを即停止
+                animationStartTime = null;
 
-                // 離脱時の未送信分補填
-                window.addEventListener('beforeunload', () => {
-                    if (localPendingAdd > 0) {
-                        flushPendingClicks();
-                    }
-                });
-            </script>
-    </footer>
+                localPendingAdd += 1;
+                currentDisplayValue += 1;
+                targetDisplayValue = currentDisplayValue;
 
-</main>
+                // 遅延ゼロで即描画！
+                countEl.textContent = currentDisplayValue.toLocaleString();
+            });
+
+            // 実行開始
+            fetchInitialCount();
+
+            // 1秒ごとに連打分をまとめて送信
+            setInterval(flushPendingClicks, 1000);
+
+            // 離脱時の未送信分補填
+            window.addEventListener('beforeunload', () => {
+                if (localPendingAdd > 0) {
+                    flushPendingClicks();
+                }
+            });
+        </script>
+</footer>
+
 </body>
 </html>
