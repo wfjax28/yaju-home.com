@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja">
-<!DOCTYPE html>
-<html lang="ja">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Noto+Sans+JP:wght@100..900&family=Potta+One&display=swap" rel="stylesheet">  
-
-<meta charset="UTF-8">
+<head>
+    <meta charset="UTF-8">
     <title>野獣邸.com | 非公式サイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Noto+Sans+JP:wght@100..900&family=Potta+One&display=swap" rel="stylesheet">  
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="referrer" content="no-referrer">
     <meta name="description" content="Discordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。">
     <link rel="icon" href="./picture/favicon.webp" sizes="any">
     <link rel="canonical" href="https://yaju-home.com/">
-
     <!-- style -->
     <link rel="stylesheet" href="./yaju-home-com.css">
     <!-- script (メニュー生成 → メニュー開閉の順で読み込む) -->
@@ -21,13 +18,12 @@
     <script src="./yaju-home-com.js" defer></script>
 </head>
 <body>
-        <header class="hero-header">
-            <a class="header-yajutei" href="./index.html">野獣邸</a>
-        </header>
-
-        <!-- グローバルメニューは yaju-home-menu.js で動的生成(単一ソース) -->
-        <div id="site-menu-root" data-page="index"></div>
-
+    <header class="hero-header">
+        <a class="header-yajutei" href="./index.html">野獣邸</a>
+    </header>
+    <!-- グローバルメニューは yaju-home-menu.js で動的生成(単一ソース) -->
+    <div id="site-menu-root" data-page="index"></div>
+    
     <main id="content" class="main-content">
         <section class="main">
             <div class="main-header">
@@ -99,16 +95,16 @@
             </a>
         </section>
         </section>
-</main>
+    </main>
 
-<footer class="site-footer">
+    <footer class="site-footer">
         <p>拓也の射精 <span id="count">0</span>円</p>
         <button class="takuya" id="btn"><img src="picture/takuyahoukou.webp" alt="拓也「ｱｰｲｸ!」"></button>
     <h2 class="site-footer__title">野獣邸 | 野獣先輩Tag</h2>
 
 
 
-<!-- Appwrite SDK (v14+) -->
+    <!-- Appwrite SDK (v14+) -->
         <script type="module">
             import { Client, Databases, Query } from "https://cdn.jsdelivr.net/npm/appwrite@14.0.1/+esm";
 
@@ -253,7 +249,6 @@
                 }
             });
         </script>
-</footer>
-
+    </footer>
 </body>
 </html>
