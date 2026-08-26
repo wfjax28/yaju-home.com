@@ -1,10 +1,61 @@
-
-<!-- [仮]index.htmlにリダイレクトするだけ -->
 <!DOCTYPE html>
-    <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <p>このリンクに飛んだ場合、リンクミスです</p>
-        <a href="/index.html" rel="canonical">野獣邸</a>
-    </head>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>野獣邸.com | 非公式サイト</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta name="description" content="Discordサーバー「野獣邸 | 野獣先輩Tag」の非公式サイトです。">
+    <link rel="icon" href="./picture/favicon.webp" sizes="any">
+    <link rel="canonical" href="https://yaju-home.com/">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Noto+Sans+JP:wght@100..900&family=Potta+One&display=swap" rel="stylesheet"> 
+
+    <link rel="stylesheet" href="../yaju-home-com.css">
+    <link rel="stylesheet" href="./votes.css">
+    <script src="../yaju-home-menu.js" defer></script>
+    <script src="../yaju-home-com.js" defer></script>
+</head>
+<body>
+    <header class="hero-header">
+        <a class="header-yajutei" href="./index.html">野獣邸</a>
+    </header>
+    <!-- グローバルメニューは yaju-home-menu.js で動的生成(単一ソース) -->
+    <div id="site-menu-root" data-page="index"></div>
+    
+    <main id="content" class="main-content">
+        <p>こ↑こ↓から投票してくれゾ〜</p>
+        <p>まだまだ整備中だけど許してください！なんでもしますから！</p>
+        <section class="cards">
+            <a href="/votes/takusha.html" class="card-link">
+            <article class="card reveal">
+                <div class="card__icon" aria-hidden="true"><img src="picture/takuyahoukou.webp" alt="哀叫拓也"></div>
+                <h2 class="card__title">拓也の射精額アンケート</h2>
+                <p class="card__text">3000円じゃないかもしれない(適当)</p>
+                <span class="card__badge">クリックしてイク</span>
+            </article>
+            </a>
+            <a href="./gois.html" class="card-link">
+            <article class="card reveal">
+                <div class="card__icon" aria-hidden="true"><img src="picture/goface.webp" alt="GOの御顔"></div>
+                <h2 class="card__title">GO is ????</h2>
+                <p class="card__text">GOは何者か決着をつけよう(提案)</p>
+                <span class="card__badge">クリックしてイク</span>
+            </article>
+            <a href="#" class="card-link">
+            <article class="card reveal">
+                <div class="card__icon" aria-hidden="true"><img src="picture/are.webp" alt="例のアレ"></div>
+                <h2 class="card__title">こ無ゾ</h2>
+                <p class="card__text">ちょっと待ってください！</p>
+                <span class="card__badge">そろそろイク</span>
+            </article>
+            </a>
+        </section>
+    </main>
+    <fooder>
+        <h1 class="footer-h1">野獣邸 | 野獣先輩Tag</p>
+    </fooder>
+</body>
 </html>
