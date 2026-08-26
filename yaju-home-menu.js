@@ -23,7 +23,7 @@
     { label: '今日の婬夢',   href: '/todays/todays.html',   icon: '/picture/medikara.webp' },
     { label: 'イベント',   href: '/welcome/events.html',   icon: '/picture/yajuhappy.webp' },
     { label: 'ホモの歴史',   href: '/welcome/history.html',   icon: '/picture/inmukun.webp' },
-    { label: '投票して♡',   href: '/votes/',   icon: './picture/are.webp'}
+    { label: '投票して♡',   href: '/votes/',   icon: './picture/are.webp'},
     { label: 'GO is ????', href:'/votes/gois.html', icon:'/picture/goface.webp'},
     { label: '拓射投票', href:'/votes/takusha.html', icon:'/picture/takuyahoukou.webp'},
 
