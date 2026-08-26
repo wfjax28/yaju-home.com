@@ -46,6 +46,20 @@
     );
   }).join('');
 
+  // ---- ※ここから追記 ----
+  const hidden = '/meinpe-gi.html';
+  const moments = [[11, 45], [19, 19], [8, 10]];
+  let hiddenAdded = false;
+  const hd = (href) =>
+    '<li class="menu__item"><a class="menu__link" href="' + href + '">' +
+    '<img class="menu__icon" src="/picture/favicon.webp" alt="" aria-hidden="true">ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？ハギャぎ！？</a></li>';
+
+  const now = new Date();
+  const isMoment = moments.some(([hh, mm]) => now.getHours() === hh && now.getMinutes() === mm);
+  const extra = isMoment ? hd(hidden) : '';
+  hiddenAdded = isMoment;
+  // ---- ※追記ここまで ----
+
   rootEl.innerHTML =
     '<button class="menu-btn" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-menu" aria-haspopup="true">' +
       '<span class="menu-btn__bar"></span>' +
@@ -54,9 +68,19 @@
     '</button>' +
     '<nav class="menu" id="site-menu" aria-label="サイトナビゲーション" aria-hidden="true">' +
       '<div class="menu__inner">' +
-        '<ul class="menu__list">' + itemsHtml + '</ul>' +
+        '<ul class="menu__list">' + itemsHtml + extra + '</ul>' +
       '</div>' +
       '<p class="menu__logo" aria-hidden="true">野獣邸</p>' +
     '</nav>' +
     '<button class="menu-backdrop" type="button" tabindex="-1" aria-hidden="true"></button>';
+
+  // ---- ※追記 ----
+  window.addEventListener('keydown', function (e) {
+    if (e.shiftKey && e.code === 'Enter' && !hiddenAdded) {
+      hiddenAdded = true;
+      const list = rootEl.querySelector('.menu__list');
+      if (list) list.insertAdjacentHTML('beforeend', hd(hidden));
+    }
+  }, true);
+  // ---- ※追記ここまで ----
 })();
