@@ -5,13 +5,3 @@ Discordサーバー「野獣邸」の非公式サイトソースリポジトリ�
 
 本サイト: https://yaju-home.com/
 テストページ: https://wfjax28.github.io/yaju-home.com/
-
-以下開発者向け
-
-ここからは開発者向けに各ファイルの内容を簡単に記していきます。ほぼフロントエンドカスのワイ(wfjax)用です (まだ途中です)
-
-index.html: 
-about.html:
-member.html:
-takusha.html: 
-gois.html: 
