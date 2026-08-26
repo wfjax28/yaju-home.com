@@ -17,13 +17,14 @@
   if (!rootEl) return;
 
   // ---- ここがメニュー項目の単一ソース ---- ※複数ページ共通 #disabled は無効項目ゾ！
+   // 本サイト実装時は https://yaju-home.com/ のリンクに書き換えてクレメンス
   const MENU_SECTIONS = [
-    { label: 'ホーム',   href: './index.html',   icon: './picture/are.webp' },
-    { label: 'はじめに',   href: './welcome/about.html',   icon: './picture/yajuthink.webp' },
-    { label: '今日の婬夢',   href: './todays/todays.html',   icon: './picture/medikara.webp' },
-    { label: 'イベント',   href: './welcome/events.html',   icon: './picture/yajuhappy.webp' },
-    { label: 'ホモの歴史',   href: './history/',   icon: './picture/inmukun.webp' },
-    { label: '投票して♡',   href: './votes/',   icon: './picture/are.webp'},
+    { label: 'ホーム',   href: 'https://wfjax28.github.io/yaju-home.com/',   icon: './picture/are.webp' },
+    { label: 'はじめに',   href: 'https://wfjax28.github.io/yaju-home.com/welcome/',   icon: './picture/yajuthink.webp' },
+    { label: '今日の婬夢',   href: 'https://wfjax28.github.io/yaju-home.com/todays/todays.html',   icon: './picture/medikara.webp' },
+    { label: 'イベント',   href: 'https://wfjax28.github.io/yaju-home.com/events',   icon: './picture/yajuhappy.webp' },
+    { label: 'ホモの歴史',   href: 'https://wfjax28.github.io/yaju-home.com/history/',   icon: './picture/inmukun.webp' },
+    { label: '投票して♡',   href: 'https://wfjax28.github.io/yaju-home.com/votes/',   icon: './picture/are.webp'},
 
     { label: '野獣邸に参加',  href: 'https://discord.gg/yjsnpi', target: '_blank', rel: 'noopener noreferrer', icon: '/picture/favicon.webp' },
   ];
