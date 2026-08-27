@@ -255,7 +255,7 @@ a {
 .intro__notice,.intro__warn {
   margin-top: 1.8em;
   padding: 1.1em 1.4em;
-  font-size: 0.86rem;
+  font-size: 1.0rem;
   background: var(--c-surface);
   border: 1px solid var(--c-border);
   /* border-leftを削除し、疑似要素でラインを表現 */
@@ -290,7 +290,8 @@ a {
 
 /* タイトル部分のスタイル */
 .intro__warn::before {
-  content: '⚠️南佳也には全く似ていません⚠️';
+  content: '⚠️ホモガキへの注意⚠️';
+  font-size: 1.125rem;
   display: block;
   font-weight: 700;
   color: red;
@@ -299,6 +300,7 @@ a {
 }
 .intro__notice::before {
   content: 'お知らせ';
+  font-size: 1.125rem;
   display: block;
   font-weight: 700;
   color: var(--c-accent);
