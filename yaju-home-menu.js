@@ -28,9 +28,9 @@
   // ---- メニュー項目の単一ソース ----
   // ドメイン名（https://...）は入れず、ルートからの相対指定に修正済み
   const MENU_SECTIONS = [
-    { label: 'ホーム',       href: '',                   icon: 'picture/are.webp' },
+    { label: 'ホーム',       href: 'index.html',                   icon: 'picture/are.webp' },
     { label: 'はじめに',     href: 'welcome/',           icon: 'picture/yajuthink.webp' },
-    { label: '今日の淫夢',   href: 'todays/todays.html', icon: 'picture/medikara.webp' },
+    { label: '今日の淫夢',   href: 'todays/', icon: 'picture/medikara.webp' },
     { label: 'イベント',     href: 'events/',            icon: 'picture/yajuhappy.webp' },
     { label: 'ホモの歴史',   href: 'history/',           icon: 'picture/inmukun.webp' },
     { label: '投票して♡',   href: 'votes/',             icon: 'picture/are.webp' },

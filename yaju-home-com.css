@@ -290,7 +290,7 @@ a {
 
 /* タイトル部分のスタイル */
 .intro__warn::before {
-  content: '⚠️ホモガキへの注意⚠️';
+  content: '⚠️南佳也には全く似ていません⚠️';
   font-size: 1.125rem;
   display: block;
   font-weight: 700;
