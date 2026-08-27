@@ -621,14 +621,16 @@ body.menu-open {
   color: #1a1208;
   background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
   border-radius: 50%;
+  /* 丸の外側にはみ出した画像をクリップする（リサイズではなく削る） */
+  overflow: hidden;
   /*box-shadow: var(--glow);*/
   /* animation: Float 4s ease-in-out infinite; */
 }
 /* その中の画像の設定 */
 .card__icon img {
   /* 親要素（.card__icon）の幅・高さに合わせる */
-  width: 75%;
-  height: 75%;
+  width: 85%;
+  height: 85%;
   /* 縦横比を保ったまま、枠内に収める（はみ出さない） */
   object-fit: contain;
 }

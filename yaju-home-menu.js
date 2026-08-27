@@ -33,7 +33,7 @@
     { label: '今日の淫夢',   href: 'todays/', icon: 'picture/medikara.webp' },
     { label: 'イベント',     href: 'events/',            icon: 'picture/yajuhappy.webp' },
     { label: 'ホモの歴史',   href: 'history/',           icon: 'picture/inmukun.webp' },
-    { label: '投票して♡',   href: 'votes/',             icon: 'picture/are.webp' },
+    { label: '投票して♡',   href: 'votes/',             icon: 'picture/dokatasuit.webp' },
 
     { label: '野獣邸に参加', href: 'https://discord.gg/yjsnpi', target: '_blank', rel: 'noopener noreferrer', icon: 'picture/favicon.webp' },
   ];
